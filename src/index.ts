@@ -8,23 +8,34 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 // Interface for file path operation requests
-interface FilePathOperation {
-    a: string;    // First operand file path
-    b: string;    // Second operand file path
+interface AdditionOperation {
+    addend_1: string;    // First addend file path
+    addend_2: string;    // Second addend file path
+}
+
+interface SubtractionOperation {
+    minuend: string;     // Number being subtracted from
+    subtrahend: string;  // Number being subtracted
+}
+
+interface MultiplicationOperation {
+    multiplicand: string; // Number being multiplied
+    multiplier: string;   // Number multiplying by
+}
+
+interface DivisionOperation {
+    dividend: string;    // Number being divided
+    divisor: string;     // Number dividing by
 }
 
 // Add numbers endpoint
 app.post('/add_numbers', async (req: Request, res: Response) => {
     try {
-        const { a, b }: FilePathOperation = req.body;
-        
-        // Alias to proper mathematical terms
-        const addend_1 = a;
-        const addend_2 = b;
+        const { addend_1, addend_2 }: AdditionOperation = req.body;
 
         if (typeof addend_1 !== 'string' || typeof addend_2 !== 'string') {
             return res.status(400).json({
-                error: 'Both a and b must be file paths (strings).'
+                error: 'Both addend_1 and addend_2 must be file paths (strings).'
             });
         }
 
@@ -38,12 +49,12 @@ app.post('/add_numbers', async (req: Request, res: Response) => {
         const timestamp = new Date().toISOString();
 
         // Store result in GCS
-        const resultPath = `calculator/add_numbers/sum_${timestamp}.json`;
-        await writeNumberToGCS(resultPath, result);
+        const outputPath = `calculator/add_numbers/sum_${timestamp}.json`;
+        await writeNumberToGCS(outputPath, result);
 
         res.json({
             result,
-            resultPath,
+            outputPath,
             operation: 'addition',
             inputs: { addend_1, addend_2 }
         });
@@ -55,15 +66,11 @@ app.post('/add_numbers', async (req: Request, res: Response) => {
 // Subtract numbers endpoint
 app.post('/subtract_numbers', async (req: Request, res: Response) => {
     try {
-        const { a, b }: FilePathOperation = req.body;
-        
-        // Alias to proper mathematical terms
-        const minuend = a;      // Number being subtracted from
-        const subtrahend = b;   // Number being subtracted
+        const { minuend, subtrahend }: SubtractionOperation = req.body;
 
         if (typeof minuend !== 'string' || typeof subtrahend !== 'string') {
             return res.status(400).json({
-                error: 'Both a and b must be file paths (strings).'
+                error: 'Both minuend and subtrahend must be file paths (strings).'
             });
         }
 
@@ -77,12 +84,12 @@ app.post('/subtract_numbers', async (req: Request, res: Response) => {
         const timestamp = new Date().toISOString();
 
         // Store result in GCS
-        const resultPath = `calculator/subtract_numbers/difference_${timestamp}.json`;
-        await writeNumberToGCS(resultPath, result);
+        const outputPath = `calculator/subtract_numbers/difference_${timestamp}.json`;
+        await writeNumberToGCS(outputPath, result);
 
         res.json({
             result,
-            resultPath,
+            outputPath,
             operation: 'subtraction',
             inputs: { minuend, subtrahend }
         });
@@ -94,15 +101,11 @@ app.post('/subtract_numbers', async (req: Request, res: Response) => {
 // Multiply numbers endpoint
 app.post('/multiply_numbers', async (req: Request, res: Response) => {
     try {
-        const { a, b }: FilePathOperation = req.body;
-        
-        // Alias to proper mathematical terms
-        const multiplicand = a;  // Number being multiplied
-        const multiplier = b;    // Number multiplying by
+        const { multiplicand, multiplier }: MultiplicationOperation = req.body;
 
         if (typeof multiplicand !== 'string' || typeof multiplier !== 'string') {
             return res.status(400).json({
-                error: 'Both a and b must be file paths (strings).'
+                error: 'Both multiplicand and multiplier must be file paths (strings).'
             });
         }
 
@@ -116,12 +119,12 @@ app.post('/multiply_numbers', async (req: Request, res: Response) => {
         const timestamp = new Date().toISOString();
 
         // Store result in GCS
-        const resultPath = `calculator/multiply_numbers/product_${timestamp}.json`;
-        await writeNumberToGCS(resultPath, result);
+        const outputPath = `calculator/multiply_numbers/product_${timestamp}.json`;
+        await writeNumberToGCS(outputPath, result);
 
         res.json({
             result,
-            resultPath,
+            outputPath,
             operation: 'multiplication',
             inputs: { multiplicand, multiplier }
         });
@@ -133,15 +136,11 @@ app.post('/multiply_numbers', async (req: Request, res: Response) => {
 // Divide numbers endpoint
 app.post('/divide_numbers', async (req: Request, res: Response) => {
     try {
-        const { a, b }: FilePathOperation = req.body;
-        
-        // Alias to proper mathematical terms
-        const dividend = a;   // Number being divided
-        const divisor = b;    // Number dividing by
+        const { dividend, divisor }: DivisionOperation = req.body;
 
         if (typeof dividend !== 'string' || typeof divisor !== 'string') {
             return res.status(400).json({
-                error: 'Both a and b must be file paths (strings).'
+                error: 'Both dividend and divisor must be file paths (strings).'
             });
         }
 
@@ -162,12 +161,12 @@ app.post('/divide_numbers', async (req: Request, res: Response) => {
         const timestamp = new Date().toISOString();
 
         // Store result in GCS
-        const resultPath = `calculator/divide_numbers/quotient_${timestamp}.json`;
-        await writeNumberToGCS(resultPath, result);
+        const outputPath = `calculator/divide_numbers/quotient_${timestamp}.json`;
+        await writeNumberToGCS(outputPath, result);
 
         res.json({
             result,
-            resultPath,
+            outputPath,
             operation: 'division',
             inputs: { dividend, divisor }
         });
