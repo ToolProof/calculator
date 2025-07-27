@@ -53,10 +53,7 @@ app.post('/add_numbers', async (req: Request, res: Response) => {
         await writeNumberToGCS(outputPath, result);
 
         res.json({
-            result,
-            outputPath,
-            operation: 'addition',
-            inputs: { addend_1, addend_2 }
+            sum: outputPath,
         });
     } catch (error) {
         res.status(500).json({ error: `Internal server error: ${error}` });
@@ -88,10 +85,7 @@ app.post('/subtract_numbers', async (req: Request, res: Response) => {
         await writeNumberToGCS(outputPath, result);
 
         res.json({
-            result,
-            outputPath,
-            operation: 'subtraction',
-            inputs: { minuend, subtrahend }
+            difference: outputPath,
         });
     } catch (error) {
         res.status(500).json({ error: `Internal server error: ${error}` });
@@ -123,10 +117,7 @@ app.post('/multiply_numbers', async (req: Request, res: Response) => {
         await writeNumberToGCS(outputPath, result);
 
         res.json({
-            result,
-            outputPath,
-            operation: 'multiplication',
-            inputs: { multiplicand, multiplier }
+            product: outputPath,
         });
     } catch (error) {
         res.status(500).json({ error: `Internal server error: ${error}` });
@@ -165,10 +156,7 @@ app.post('/divide_numbers', async (req: Request, res: Response) => {
         await writeNumberToGCS(outputPath, result);
 
         res.json({
-            result,
-            outputPath,
-            operation: 'division',
-            inputs: { dividend, divisor }
+            quotient: outputPath,
         });
     } catch (error) {
         res.status(500).json({ error: `Internal server error: ${error}` });
