@@ -53,7 +53,14 @@ app.post('/add_numbers', async (req: Request, res: Response) => {
         await writeNumberToGCS(outputPath, result);
 
         res.json({
-            sum: outputPath,
+            outputs: {
+                sum: outputPath
+            },
+            metadata: {
+                result: result,
+                operation: 'addition',
+                inputs: [addend_1, addend_2]
+            }
         });
     } catch (error) {
         res.status(500).json({ error: `Internal server error: ${error}` });
@@ -85,7 +92,14 @@ app.post('/subtract_numbers', async (req: Request, res: Response) => {
         await writeNumberToGCS(outputPath, result);
 
         res.json({
-            difference: outputPath,
+            outputs: {
+                difference: outputPath
+            },
+            metadata: {
+                result: result,
+                operation: 'subtraction',
+                inputs: [minuend, subtrahend]
+            }
         });
     } catch (error) {
         res.status(500).json({ error: `Internal server error: ${error}` });
@@ -117,7 +131,14 @@ app.post('/multiply_numbers', async (req: Request, res: Response) => {
         await writeNumberToGCS(outputPath, result);
 
         res.json({
-            product: outputPath,
+            outputs: {
+                product: outputPath
+            },
+            metadata: {
+                result: result,
+                operation: 'multiplication',
+                inputs: [multiplicand, multiplier]
+            }
         });
     } catch (error) {
         res.status(500).json({ error: `Internal server error: ${error}` });
@@ -156,7 +177,14 @@ app.post('/divide_numbers', async (req: Request, res: Response) => {
         await writeNumberToGCS(outputPath, result);
 
         res.json({
-            quotient: outputPath,
+            outputs: {
+                quotient: outputPath
+            },
+            metadata: {
+                result: result,
+                operation: 'division',
+                inputs: [dividend, divisor]
+            }
         });
     } catch (error) {
         res.status(500).json({ error: `Internal server error: ${error}` });
