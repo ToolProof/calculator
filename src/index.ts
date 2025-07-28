@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { readNumberFromGCS, writeNumberToGCS } from './gcs-utils';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT) || 8080;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -197,8 +197,9 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 // Start the server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Calculator server is running on port ${PORT}`);
 });
+
 
 export default app;
