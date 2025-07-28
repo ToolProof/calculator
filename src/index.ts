@@ -56,11 +56,11 @@ app.post('/add_numbers', async (req: Request, res: Response) => {
             outputs: {
                 sum: outputPath
             },
-            metadata: {
+            // ATTENTION_RONAK: Here you can see how add_numbers returns metadata in accordance with the job specification in mocks/calculator.ts in the updohilo repo. You don't need to do anything here. I'm guiding you here just for your understanding.
+            metadata: [{
                 result: result,
-                operation: 'addition',
                 inputs: [addend_1, addend_2]
-            }
+            }]
         });
     } catch (error) {
         res.status(500).json({ error: `Internal server error: ${error}` });
@@ -95,11 +95,10 @@ app.post('/subtract_numbers', async (req: Request, res: Response) => {
             outputs: {
                 difference: outputPath
             },
-            metadata: {
+            metadata: [{
                 result: result,
-                operation: 'subtraction',
                 inputs: [minuend, subtrahend]
-            }
+            }]
         });
     } catch (error) {
         res.status(500).json({ error: `Internal server error: ${error}` });
@@ -134,11 +133,10 @@ app.post('/multiply_numbers', async (req: Request, res: Response) => {
             outputs: {
                 product: outputPath
             },
-            metadata: {
+            metadata: [{
                 result: result,
-                operation: 'multiplication',
                 inputs: [multiplicand, multiplier]
-            }
+            }]
         });
     } catch (error) {
         res.status(500).json({ error: `Internal server error: ${error}` });
@@ -180,11 +178,10 @@ app.post('/divide_numbers', async (req: Request, res: Response) => {
             outputs: {
                 quotient: outputPath
             },
-            metadata: {
+            metadata: [{
                 result: result,
-                operation: 'division',
                 inputs: [dividend, divisor]
-            }
+            }]
         });
     } catch (error) {
         res.status(500).json({ error: `Internal server error: ${error}` });
