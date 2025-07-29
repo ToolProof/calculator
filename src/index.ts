@@ -95,12 +95,14 @@ app.post('/subtract_numbers', async (req: Request, res: Response) => {
 
         res.json({
             outputs: {
-                difference: outputPath
+                difference: {
+                    path: outputPath,
+                    metadata: {
+                        result: result,
+                        inputs: [minuend, subtrahend]
+                    }
+                }
             },
-            metadata: [{
-                result: result,
-                inputs: [minuend, subtrahend]
-            }]
         });
     } catch (error) {
         res.status(500).json({ error: `Internal server error: ${error}` });
@@ -133,12 +135,14 @@ app.post('/multiply_numbers', async (req: Request, res: Response) => {
 
         res.json({
             outputs: {
-                product: outputPath
-            },
-            metadata: [{
-                result: result,
-                inputs: [multiplicand, multiplier]
-            }]
+                product: {
+                    path: outputPath,
+                    metadata: {
+                        result: result,
+                        inputs: [multiplicand, multiplier]
+                    }
+                }
+            }
         });
     } catch (error) {
         res.status(500).json({ error: `Internal server error: ${error}` });
@@ -178,12 +182,14 @@ app.post('/divide_numbers', async (req: Request, res: Response) => {
 
         res.json({
             outputs: {
-                quotient: outputPath
-            },
-            metadata: [{
-                result: result,
-                inputs: [dividend, divisor]
-            }]
+                quotient: {
+                    path: outputPath,
+                    metadata: {
+                        result: result,
+                        inputs: [dividend, divisor]
+                    }
+                }
+            }
         });
     } catch (error) {
         res.status(500).json({ error: `Internal server error: ${error}` });
