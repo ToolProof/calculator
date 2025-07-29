@@ -56,7 +56,7 @@ app.post('/add_numbers', async (req: Request, res: Response) => {
             outputs: {
                 sum: outputPath
             },
-            // ATTENTION_RONAK: Here you can see how add_numbers returns metadata in accordance with the job specification in mocks/calculator.ts in the updohilo repo. You don't need to do anything here. I'm guiding you here just for your understanding.
+            // ATTENTION_RONAK: Here you can see how add_numbers returns metadata in accordance with the job specification in mocks/calculator.ts in the updohilo-ts repo. You don't need to do anything here. I'm guiding you here just for your understanding.
             metadata: [{
                 result: result,
                 inputs: [addend_1, addend_2]
