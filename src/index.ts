@@ -56,10 +56,6 @@ app.post('/add_numbers', async (req: Request, res: Response) => {
             outputs: {
                 sum: {
                     path: outputPath,
-                    // ATTENTION_RONAK: Here you can see how add_numbers returns metadata in accordance with the job specification in mocks/calculator.ts in the updohilo-ts repo. You don't need to do anything here. I'm guiding you here just for your understanding.
-                    metadata: {
-                        result: result,
-                    }
                 }
             },
         });
@@ -96,9 +92,6 @@ app.post('/subtract_numbers', async (req: Request, res: Response) => {
             outputs: {
                 difference: {
                     path: outputPath,
-                    metadata: {
-                        result: result,
-                    }
                 }
             },
         });
@@ -135,9 +128,6 @@ app.post('/multiply_numbers', async (req: Request, res: Response) => {
             outputs: {
                 product: {
                     path: outputPath,
-                    metadata: {
-                        result: result,
-                    }
                 }
             }
         });
@@ -181,9 +171,6 @@ app.post('/divide_numbers', async (req: Request, res: Response) => {
             outputs: {
                 quotient: {
                     path: outputPath,
-                    metadata: {
-                        result: result,
-                    }
                 }
             }
         });
