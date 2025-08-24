@@ -2,11 +2,11 @@ import { Storage } from '@google-cloud/storage';
 
 // Initialize Google Cloud Storage
 const storage = new Storage();
-const BUCKET_NAME = process.env.BUCKET_NAME || 'tp_resources';
+const BUCKET_NAME = process.env.BUCKET_NAME || 'tp-instances';
 
 // Interface for the JSON structure in storage files
-export interface NumberValue {
-    value: number;
+export interface IntegerInstance {
+    semanticIdentity: number;
 }
 
 /**
@@ -14,19 +14,19 @@ export interface NumberValue {
  * @param filePath The path to the file in the GCS bucket
  * @returns The numeric value from the file
  */
-export async function readNumberFromGCS(filePath: string): Promise<number> {
+export async function readFromGCS(filePath: string): Promise<number> {
     try {
         const bucket = storage.bucket(BUCKET_NAME);
         const file = bucket.file(filePath);
 
         const [fileContents] = await file.download();
-        const jsonData: NumberValue = JSON.parse(fileContents.toString());
+        const jsonData: IntegerInstance = JSON.parse(fileContents.toString());
 
-        if (typeof jsonData.value !== 'number') {
+        if (typeof jsonData.semanticIdentity !== 'number') {
             throw new Error(`File ${filePath} does not contain a valid number value`);
         }
 
-        return jsonData.value;
+        return jsonData.semanticIdentity;
     } catch (error) {
         throw new Error(`Failed to read file ${filePath}: ${error}`);
     }
@@ -37,12 +37,12 @@ export async function readNumberFromGCS(filePath: string): Promise<number> {
  * @param filePath The path where to store the file in the GCS bucket
  * @param value The numeric value to store
  */
-export async function writeNumberToGCS(filePath: string, value: number): Promise<void> {
+export async function writeToGCS(filePath: string, semanticIdentity: number): Promise<void> {
     try {
         const bucket = storage.bucket(BUCKET_NAME);
         const file = bucket.file(filePath);
 
-        const jsonData: NumberValue = { value };
+        const jsonData: IntegerInstance = { semanticIdentity };
         const jsonString = JSON.stringify(jsonData, null, 2);
 
         await file.save(jsonString, {

@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { readNumberFromGCS, writeNumberToGCS } from './gcs-utils';
+import { readFromGCS, writeToGCS } from './gcs-utils';
 
 const app = express();
 const PORT = Number(process.env.PORT) || 8080;
@@ -9,27 +9,26 @@ app.use(express.json());
 
 // Interface for file path operation requests
 interface AdditionOperation {
-    addend_1: string;    // First addend file path
-    addend_2: string;    // Second addend file path
+    addend_1: string;
+    addend_2: string;
 }
 
 interface SubtractionOperation {
-    minuend: string;     // Number being subtracted from
-    subtrahend: string;  // Number being subtracted
+    minuend: string;
+    subtrahend: string;
 }
 
 interface MultiplicationOperation {
-    multiplicand: string; // Number being multiplied
-    multiplier: string;   // Number multiplying by
+    multiplicand: string;
+    multiplier: string;
 }
 
 interface DivisionOperation {
-    dividend: string;    // Number being divided
-    divisor: string;     // Number dividing by
+    dividend: string;
+    divisor: string;
 }
 
-// Add numbers endpoint
-app.post('/add_numbers', async (req: Request, res: Response) => {
+app.post('/add-integers', async (req: Request, res: Response) => {
     try {
         const { addend_1, addend_2 }: AdditionOperation = req.body;
 
@@ -40,8 +39,8 @@ app.post('/add_numbers', async (req: Request, res: Response) => {
         }
 
         // Read values from GCS files
-        const valueA = await readNumberFromGCS(addend_1);
-        const valueB = await readNumberFromGCS(addend_2);
+        const valueA = await readFromGCS(addend_1);
+        const valueB = await readFromGCS(addend_2);
 
         // Perform calculation
         const result = valueA + valueB;
@@ -49,8 +48,8 @@ app.post('/add_numbers', async (req: Request, res: Response) => {
         const timestamp = new Date().toISOString();
 
         // Store result in GCS
-        const outputPath = `calculator/add_numbers/sum_${timestamp}.json`;
-        await writeNumberToGCS(outputPath, result);
+        const outputPath = `calculator/add-integers/sum-${timestamp}.json`;
+        await writeToGCS(outputPath, result);
 
         res.json({
             outputs: {
@@ -64,8 +63,8 @@ app.post('/add_numbers', async (req: Request, res: Response) => {
     }
 });
 
-// Subtract numbers endpoint
-app.post('/subtract_numbers', async (req: Request, res: Response) => {
+
+app.post('/subtract-integers', async (req: Request, res: Response) => {
     try {
         const { minuend, subtrahend }: SubtractionOperation = req.body;
 
@@ -76,8 +75,8 @@ app.post('/subtract_numbers', async (req: Request, res: Response) => {
         }
 
         // Read values from GCS files
-        const minuendValue = await readNumberFromGCS(minuend);
-        const subtrahendValue = await readNumberFromGCS(subtrahend);
+        const minuendValue = await readFromGCS(minuend);
+        const subtrahendValue = await readFromGCS(subtrahend);
 
         // Perform calculation (minuend - subtrahend)
         const result = minuendValue - subtrahendValue;
@@ -85,8 +84,8 @@ app.post('/subtract_numbers', async (req: Request, res: Response) => {
         const timestamp = new Date().toISOString();
 
         // Store result in GCS
-        const outputPath = `calculator/subtract_numbers/difference_${timestamp}.json`;
-        await writeNumberToGCS(outputPath, result);
+        const outputPath = `calculator/subtract-integers/difference-${timestamp}.json`;
+        await writeToGCS(outputPath, result);
 
         res.json({
             outputs: {
@@ -100,8 +99,8 @@ app.post('/subtract_numbers', async (req: Request, res: Response) => {
     }
 });
 
-// Multiply numbers endpoint
-app.post('/multiply_numbers', async (req: Request, res: Response) => {
+
+app.post('/multiply_integers', async (req: Request, res: Response) => {
     try {
         const { multiplicand, multiplier }: MultiplicationOperation = req.body;
 
@@ -112,8 +111,8 @@ app.post('/multiply_numbers', async (req: Request, res: Response) => {
         }
 
         // Read values from GCS files
-        const multiplicandValue = await readNumberFromGCS(multiplicand);
-        const multiplierValue = await readNumberFromGCS(multiplier);
+        const multiplicandValue = await readFromGCS(multiplicand);
+        const multiplierValue = await readFromGCS(multiplier);
 
         // Perform calculation
         const result = multiplicandValue * multiplierValue;
@@ -121,8 +120,8 @@ app.post('/multiply_numbers', async (req: Request, res: Response) => {
         const timestamp = new Date().toISOString();
 
         // Store result in GCS
-        const outputPath = `calculator/multiply_numbers/product_${timestamp}.json`;
-        await writeNumberToGCS(outputPath, result);
+        const outputPath = `calculator/multiply-integers/product-${timestamp}.json`;
+        await writeToGCS(outputPath, result);
 
         res.json({
             outputs: {
@@ -136,8 +135,8 @@ app.post('/multiply_numbers', async (req: Request, res: Response) => {
     }
 });
 
-// Divide numbers endpoint
-app.post('/divide_numbers', async (req: Request, res: Response) => {
+
+app.post('/divide_integers', async (req: Request, res: Response) => {
     try {
         const { dividend, divisor }: DivisionOperation = req.body;
 
@@ -148,8 +147,8 @@ app.post('/divide_numbers', async (req: Request, res: Response) => {
         }
 
         // Read values from GCS files
-        const dividendValue = await readNumberFromGCS(dividend);
-        const divisorValue = await readNumberFromGCS(divisor);
+        const dividendValue = await readFromGCS(dividend);
+        const divisorValue = await readFromGCS(divisor);
 
         // Check for division by zero
         if (divisorValue === 0) {
@@ -164,8 +163,8 @@ app.post('/divide_numbers', async (req: Request, res: Response) => {
         const timestamp = new Date().toISOString();
 
         // Store result in GCS
-        const outputPath = `calculator/divide_numbers/quotient_${timestamp}.json`;
-        await writeNumberToGCS(outputPath, result);
+        const outputPath = `calculator/divide_integers/quotient-${timestamp}.json`;
+        await writeToGCS(outputPath, result);
 
         res.json({
             outputs: {
