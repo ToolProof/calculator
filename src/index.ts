@@ -31,8 +31,8 @@ interface DivisionOperation {
 app.post('/add-integers', async (req: Request, res: Response) => {
     try {
         const {
-            "addend-one": addendOne,
-            "addend-two": addendTwo
+            "RER-zaapgAMhtdNiEPOQKMJY": addendOne, // ATTENTION
+            "RER-wfPmEj8Ui0ZVtGC7xhww": addendTwo // ATTENTION
         } = req.body;
 
         if (typeof addendOne !== 'string' || typeof addendTwo !== 'string') {
@@ -56,7 +56,7 @@ app.post('/add-integers', async (req: Request, res: Response) => {
 
         res.json({
             outputs: {
-                sum: {
+                'RER-YXzbqPS20owwH3YwY0mQ': { // ATTENTION
                     path: outputPath,
                 }
             },
