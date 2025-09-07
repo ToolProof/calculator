@@ -9,8 +9,8 @@ app.use(express.json());
 
 // Interface for file path operation requests
 interface AdditionOperation {
-    addend_1: string;
-    addend_2: string;
+    addendOne: string;
+    addendTwo: string;
 }
 
 interface SubtractionOperation {
@@ -30,17 +30,20 @@ interface DivisionOperation {
 
 app.post('/add-integers', async (req: Request, res: Response) => {
     try {
-        const { addend_1, addend_2 }: AdditionOperation = req.body;
+        const {
+            "addend-one": addendOne,
+            "addend-two": addendTwo
+        } = req.body;
 
-        if (typeof addend_1 !== 'string' || typeof addend_2 !== 'string') {
+        if (typeof addendOne !== 'string' || typeof addendTwo !== 'string') {
             return res.status(400).json({
-                error: 'Both addend_1 and addend_2 must be file paths (strings).'
+                error: 'Both addendOne and addendTwo must be file paths (strings).'
             });
         }
 
         // Read values from GCS files
-        const valueA = await readFromGCS(addend_1);
-        const valueB = await readFromGCS(addend_2);
+        const valueA = await readFromGCS(addendOne);
+        const valueB = await readFromGCS(addendTwo);
 
         // Perform calculation
         const result = valueA + valueB;
