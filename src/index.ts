@@ -58,6 +58,7 @@ app.post('/add-integers', async (req: Request, res: Response) => {
             outputs: {
                 'RER-YXzbqPS20owwH3YwY0mQ': { // ATTENTION
                     path: outputPath,
+                    timestamp
                 }
             },
         });
