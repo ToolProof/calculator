@@ -49,7 +49,7 @@ app.post('/add', async (req: Request, res: Response) => {
         const result = valueA + valueB;
 
         // Store result in GCS
-        const outputPath = `${result}.json`;
+        const outputPath = `integers/${result}.json`;
         await writeToGCS(outputPath, result);
 
         const timestamp = new Date().toISOString();
@@ -85,7 +85,7 @@ app.post('/multiply', async (req: Request, res: Response) => {
         const result = multiplicandValue * multiplierValue;
 
         // Store result in GCS
-        const outputPath = `${result}.json`;
+        const outputPath = `integers/${result}.json`;
         await writeToGCS(outputPath, result);
 
         const timestamp = new Date().toISOString();
