@@ -2,7 +2,7 @@ import { Storage } from '@google-cloud/storage';
 
 // Initialize Google Cloud Storage
 const storage = new Storage();
-const BUCKET_NAME = process.env.BUCKET_NAME || 'tp-instances';
+const BUCKET_NAME = process.env.BUCKET_NAME || 'tp-resources'; // Default bucket name if not set
 
 // Interface for the JSON structure in storage files
 export interface IntegerInstance {
