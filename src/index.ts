@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
-import { readFromGCS, writeToGCS } from './gcs-utils';
+import { readFromCAFS, writeToCAFS } from './ioInterface';
+
 
 const app = express();
 const PORT = Number(process.env.PORT) || 8080;
@@ -42,15 +43,15 @@ app.post('/add', async (req: Request, res: Response) => {
         }
 
         // Read values from GCS files
-        const valueA = await readFromGCS(addendOne);
-        const valueB = await readFromGCS(addendTwo);
+        const valueA = await readFromCAFS(addendOne);
+        const valueB = await readFromCAFS(addendTwo);
 
         // Perform calculation
         const result = valueA + valueB;
 
-        // Store result in GCS
-        const outputPath = `integers/${result}.json`;
-        await writeToGCS(outputPath, result);
+        // ATTENTION_RONAK: cafs must return the path where it stored the file
+        // Store result
+        const outputPath = await writeToCAFS(result);
 
         const timestamp = new Date().toISOString();
 
@@ -67,7 +68,7 @@ app.post('/add', async (req: Request, res: Response) => {
     }
 });
 
-app.post('/multiply', async (req: Request, res: Response) => {
+/* app.post('/multiply', async (req: Request, res: Response) => {
     try {
         const { multiplicand, multiplier }: MultiplicationOperation = req.body;
 
@@ -101,7 +102,7 @@ app.post('/multiply', async (req: Request, res: Response) => {
     } catch (error) {
         res.status(500).json({ error: `Internal server error: ${error}` });
     }
-});
+}); */
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
