@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
-import { readFromCAFS, writeToCAFS } from './ioInterface';
+import { readFromCAFS, writeToCAFS } from './ioInterface.js';
+import { write } from 'fs';
 
 
 const app = express();
@@ -29,6 +30,20 @@ interface DivisionOperation {
     divisor: string;
 }
 
+app.get('/', async (req: Request, res: Response) => {
+    /* await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-00000000000000000000', 0);
+    await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-11111111111111111111', 1);
+    await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-22222222222222222222', 2);
+    await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-33333333333333333333', 3);
+    await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-44444444444444444444', 4);
+    await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-55555555555555555555', 5);
+    await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-66666666666666666666', 6);
+    await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-77777777777777777777', 7);
+    await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-88888888888888888888', 8);
+    await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-99999999999999999999', 9); */
+    res.send('Test write to CAFS');
+});
+
 app.post('/add', async (req: Request, res: Response) => {
     try {
         const {
@@ -49,16 +64,15 @@ app.post('/add', async (req: Request, res: Response) => {
         // Perform calculation
         const result = valueA + valueB;
 
-        // ATTENTION_RONAK: cafs must return the path where it stored the file
         // Store result
-        const outputPath = await writeToCAFS(result);
+        const result2 = await writeToCAFS('', result);
 
         const timestamp = new Date().toISOString();
 
         res.json({
             outputs: {
                 'RER-0LD9l1uRbrdQLkxGFc6k': { // ATTENTION
-                    path: outputPath,
+                    path: result2.storagePath,
                     timestamp
                 }
             },

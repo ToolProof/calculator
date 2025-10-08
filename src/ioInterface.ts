@@ -8,13 +8,13 @@ export interface IntegerResourceType {
 }
 
 /**
- * Reads a number value from a Google Cloud Storage file, via CAFS
+ * Reads an integer value from a Google Cloud Storage file, via CAFS
  * @param filePath The path to the file in the GCS bucket
  */
 export async function readFromCAFS(filePath: string): Promise<number> {
     try {
 
-        const [fileContents] = await cafs.read(filePath);
+        const [fileContents] = await cafs.retrieveContent('RET-eSDHNowTprW6KEI2BWVI', filePath);
         const jsonData: IntegerResourceType = JSON.parse(fileContents.toString());
 
         if (typeof jsonData.semanticIdentity !== 'number') {
@@ -27,10 +27,10 @@ export async function readFromCAFS(filePath: string): Promise<number> {
     }
 }
 
-/** Writes a number value to a Google Cloud Storage file, via CAFS
- * @param value The numeric value to store
+/** Writes an integer value to a Google Cloud Storage file, via CAFS
+ * @param value The integer value to store
  */
-export async function writeToCAFS(value: number): Promise<string> {
+export async function writeToCAFS(resourceId: string, value: number) {
     try {
         const jsonData: IntegerResourceType =
         {
@@ -38,9 +38,8 @@ export async function writeToCAFS(value: number): Promise<string> {
         };
         const jsonString = JSON.stringify(jsonData, null, 2);
 
-        // ATTENTION_RONAK: cafs must return the path where it stored the file
-        const outputPath = await cafs.write(jsonString);
-        return outputPath;
+        const result = await cafs.storeContent('RET-eSDHNowTprW6KEI2BWVI', resourceId, jsonString);
+        return result;
     } catch (error) {
         throw new Error(`Failed to write file: ${error}`);
     }
