@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
 import { readFromCAFS, writeToCAFS } from './ioInterface.js';
-import { write } from 'fs';
 
 
 const app = express();
