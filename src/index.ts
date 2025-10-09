@@ -29,25 +29,31 @@ interface DivisionOperation {
     divisor: string;
 }
 
-app.get('/', async (req: Request, res: Response) => {
-    /* await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-00000000000000000000', 0);
-    await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-11111111111111111111', 1);
-    await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-22222222222222222222', 2);
-    await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-33333333333333333333', 3);
-    await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-44444444444444444444', 4);
-    await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-55555555555555555555', 5);
-    await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-66666666666666666666', 6);
-    await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-77777777777777777777', 7);
-    await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-88888888888888888888', 8);
-    await writeToCAFS('RER-0LD9l1uRbrdQLkxGFc6k__JOS-99999999999999999999', 9); */
-    res.send('Test write to CAFS');
+app.get('/', (req: Request, res: Response) => {
+    // Keep root endpoint side-effect free to avoid edge 503s when storage is unavailable.
+    res.json({ status: 'OK', message: 'Numerical service is up', timestamp: new Date().toISOString() });
+});
+
+// Safe CAFS debugging endpoint: GET /test-cafs?id=<RER-or-path>
+app.get('/test-cafs', async (req: Request, res: Response) => {
+    try {
+        const id = req.query.id;
+        if (typeof id !== 'string' || !id) {
+            return res.status(400).json({ error: "Missing required query parameter 'id'" });
+        }
+        const value = await readFromCAFS(id);
+        return res.json({ id, value });
+    } catch (error) {
+        return res.status(500).json({ error: `CAFS read failed: ${error}` });
+    }
 });
 
 app.post('/add', async (req: Request, res: Response) => {
     try {
         const {
             "RER-456GInRLCbpCes1478hb": addendOne, // ATTENTION
-            "RER-KCL5s1QfdSJ7SRUqxlWj": addendTwo // ATTENTION
+            "RER-KCL5s1QfdSJ7SRUqxlWj": addendTwo, // ATTENTION
+            "RER-0LD9l1uRbrdQLkxGFc6k": resourceId // ATTENTION
         } = req.body;
 
         if (typeof addendOne !== 'string' || typeof addendTwo !== 'string') {
@@ -64,7 +70,7 @@ app.post('/add', async (req: Request, res: Response) => {
         const result = valueA + valueB;
 
         // Store result
-        const result2 = await writeToCAFS('', result);
+        const result2 = await writeToCAFS(resourceId, result);
 
         const timestamp = new Date().toISOString();
 

@@ -13,9 +13,9 @@ export interface IntegerResourceType {
  */
 export async function readFromCAFS(filePath: string): Promise<number> {
     try {
-
-        const [fileContents] = await cafs.retrieveContent('RET-eSDHNowTprW6KEI2BWVI', filePath);
-        const jsonData: IntegerResourceType = JSON.parse(fileContents.toString());
+        // retrieveContent now returns a string with the full JSON content
+        const fileContents: string = await cafs.retrieveContent('RET-eSDHNowTprW6KEI2BWVI', filePath);
+        const jsonData: IntegerResourceType = JSON.parse(fileContents);
 
         if (typeof jsonData.semanticIdentity !== 'number') {
             throw new Error(`File ${filePath} does not contain a valid number value`);
