@@ -14,7 +14,7 @@ export interface IntegerResourceType {
 export async function readFromCAFS(filePath: string): Promise<number> {
     try {
         // retrieveContent now returns a string with the full JSON content
-        const fileContents: string = await cafs.retrieveContent('RET-eSDHNowTprW6KEI2BWVI', filePath);
+        const fileContents: string = await cafs.retrieveContent('TYPE-wSo0cBZk3yK9F5DUb9zV', filePath); // ATTENTION: hardcoded type ID
         const jsonData: IntegerResourceType = JSON.parse(fileContents);
 
         if (typeof jsonData.semanticIdentity !== 'number') {
@@ -38,7 +38,7 @@ export async function writeToCAFS(resourceId: string, value: number) {
         };
         const jsonString = JSON.stringify(jsonData, null, 2);
 
-        const result = await cafs.storeContent('RET-eSDHNowTprW6KEI2BWVI', resourceId, jsonString);
+        const result = await cafs.storeContent('TYPE-wSo0cBZk3yK9F5DUb9zV', resourceId, jsonString); // ATTENTION: hardcoded type ID
         return result;
     } catch (error) {
         throw new Error(`Failed to write file: ${error}`);
