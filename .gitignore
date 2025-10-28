@@ -2,3 +2,5 @@
 .vscode/
 
 node_modules/
+.env
+toolproof-563fe-556dd7e1ea79.json
