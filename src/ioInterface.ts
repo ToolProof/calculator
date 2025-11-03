@@ -38,7 +38,7 @@ export async function writeToCAFS(resourceId: string, value: number) {
         };
         const jsonString = JSON.stringify(jsonData, null, 2);
 
-        const result = await cafs.storeContent('TYPE-wSo0cBZk3yK9F5DUb9zV', resourceId, jsonString); // ATTENTION: hardcoded type ID
+        const result = await cafs.storeContent('TYPE-xrscQa05EjnIWTVvIFhh', resourceId, jsonString); // ATTENTION: hardcoded type ID
         return result;
     } catch (error) {
         throw new Error(`Failed to write file: ${error}`);
