@@ -12,7 +12,8 @@ env:
   REGION: ${{ secrets.REGION }}
   REPOSITORY: ${{ secrets.REPOSITORY }}
   IMAGE: ${{ secrets.IMAGE_NAME }}
-  DEPLOYMENT_NAME: numericals
+  DEPLOYMENT_NAME: numericals-deployment
+  CONTAINER_NAME: numericals
 
 jobs:
   deploy:
@@ -65,5 +66,5 @@ jobs:
 
       - name: Deploy to GKE
         run: |
-          kubectl set image deployment/${{ env.DEPLOYMENT_NAME }} ${{ env.DEPLOYMENT_NAME }}=${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:latest
+          kubectl set image deployment/${{ env.DEPLOYMENT_NAME }} ${{ env.CONTAINER_NAME }}=${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:latest
           kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
