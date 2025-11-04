@@ -66,5 +66,5 @@ jobs:
 
       - name: Deploy to GKE
         run: |
-          kubectl set image deployment/${{ env.DEPLOYMENT_NAME }} ${{ env.CONTAINER_NAME }}=${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:latest
+          kubectl rollout restart deployment/${{ env.DEPLOYMENT_NAME }}
           kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
