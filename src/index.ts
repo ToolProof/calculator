@@ -51,9 +51,9 @@ app.get('/test-cafs', async (req: Request, res: Response) => {
 app.post('/add', async (req: Request, res: Response) => {
     try {
         const {
-            "ROLE-oudXG6IYvbGPb4iD7E4I": addendOne, // ATTENTION
-            "ROLE-T46MOQF08s4ZQ0l7DzpT": addendTwo, // ATTENTION
-            "ROLE-xXaGoMFqh23UNhwCCYfQ": resourceId // ATTENTION
+            "ROLE-9WU78dZOrFgmPO7qPMGH": addendOne, // ATTENTION
+            "ROLE-BSjUa4FGOj2K2pZ8V4RY": addendTwo, // ATTENTION
+            "ROLE-tkNmvXRvkcghNP6MoPxe": resourceId // ATTENTION
         } = req.body;
 
         if (typeof addendOne !== 'string' || typeof addendTwo !== 'string') {
@@ -76,7 +76,7 @@ app.post('/add', async (req: Request, res: Response) => {
 
         res.json({
             outputs: {
-                'ROLE-xXaGoMFqh23UNhwCCYfQ': { // ATTENTION
+                'ROLE-tkNmvXRvkcghNP6MoPxe': { // ATTENTION
                     path: result2.storagePath,
                     timestamp
                 }
