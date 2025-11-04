@@ -12,6 +12,7 @@ env:
   REGION: ${{ secrets.REGION }}
   REPOSITORY: ${{ secrets.REPOSITORY }}
   IMAGE: ${{ secrets.IMAGE_NAME }}
+  GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 
 jobs:
   deploy:
@@ -21,6 +22,10 @@ jobs:
       - name: Print first 50 chars of secret (safe)
         run: |
           echo "${{ secrets.GCP_SA_KEY }}" | head -c 50
+      
+      - name: Print first 50 chars of env (safe)
+        run: |
+          echo "${{ env.GCP_SA_KEY }}" | head -c 50
 
       - name: Checkout code
         uses: actions/checkout@v4
