@@ -35,12 +35,6 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      - name: Get GKE credentials
-        uses: google-github-actions/get-gke-credentials@v2
-        with:
-          cluster_name: ${{ env.GKE_CLUSTER }}
-          location: ${{ env.GKE_ZONE }}
-
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v1
         with:
@@ -57,8 +51,15 @@ jobs:
         run: |
           docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:latest
 
+      - name: Install gcloud auth plugin manually
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-cloud-sdk
+          gcloud components install gke-gcloud-auth-plugin
+
       - name: Get GKE credentials
         run: |
+          export USE_GKE_GCLOUD_AUTH_PLUGIN=True
           gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} --zone ${{ env.GKE_ZONE }} --project ${{ env.PROJECT_ID }}
 
       - name: Deploy to GKE
