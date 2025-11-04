@@ -12,7 +12,6 @@ env:
   REGION: ${{ secrets.REGION }}
   REPOSITORY: ${{ secrets.REPOSITORY }}
   IMAGE: ${{ secrets.IMAGE_NAME }}
-  GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 
 jobs:
   deploy:
@@ -22,10 +21,6 @@ jobs:
       - name: Print first 50 chars of secret (safe)
         run: |
           echo "${{ secrets.GCP_SA_KEY }}" | head -c 50
-      
-      - name: Print first 50 chars of env (safe)
-        run: |
-          echo "${{ env.GCP_SA_KEY }}" | head -c 50
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -35,6 +30,10 @@ jobs:
         with:
           project_id: ${{ env.PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Activate service account
+        run: |
+          gcloud auth activate-service-account --key-file <(echo "${{ secrets.GCP_SA_KEY }}")
 
       - name: Configure Docker authentication
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
