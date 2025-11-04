@@ -18,6 +18,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Setup key file
+        run: |
+          echo "${{ secrets.GCP_KEY }}" | sed 's/\\n/\n/g' > key.json
+      
       - name: Print first 50 chars of secret (safe)
         run: |
           echo "${{ secrets.GCP_SA_KEY }}" | head -n 20
@@ -25,16 +29,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up gcloud
-        uses: google-github-actions/setup-gcloud@v1
-        with:
-          project_id: ${{ env.PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-
       - name: Activate service account
         run: |
-          echo "${{ secrets.GCP_SA_KEY }}" > ${HOME}/gcloud-key.json
-          gcloud auth activate-service-account --key-file=${HOME}/gcloud-key.json
+          gcloud auth activate-service-account --key-file=key.json
+          gcloud config set project ${{ env.PROJECT_ID }}
 
       - name: Configure Docker authentication
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
