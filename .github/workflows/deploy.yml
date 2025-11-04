@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Print first 50 chars of secret (safe)
         run: |
-          echo "${{ secrets.GCP_SA_KEY }}" | head -c 50
+          echo "${{ secrets.GCP_SA_KEY }}" | head -n 20
 
       - name: Checkout code
         uses: actions/checkout@v4
