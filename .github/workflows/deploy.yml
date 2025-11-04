@@ -33,7 +33,7 @@ jobs:
 
       - name: Activate service account
         run: |
-          gcloud auth activate-service-account --key-file <(echo "${{ secrets.GCP_SA_KEY }}")
+          gcloud auth activate-service-account --key-file <(printf '%s' "${{ secrets.GCP_SA_KEY }}")
 
       - name: Configure Docker authentication
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
