@@ -31,7 +31,7 @@ interface DivisionOperation {
 
 app.get('/', (req: Request, res: Response) => {
     // Keep root endpoint side-effect free to avoid edge 503s when storage is unavailable.
-    res.json({ status: 'OK', message: 'Numerical service is up and running....', timestamp: new Date().toISOString() });
+    res.json({ status: 'OK', message: 'Numerical service is up and running.', timestamp: new Date().toISOString() });
 });
 
 // Safe CAFS debugging endpoint: GET /test-cafs?id=<RER-or-path>
