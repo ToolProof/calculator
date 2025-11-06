@@ -8,10 +8,18 @@ const PORT = Number(process.env.PORT) || 8080;
 // Middleware to parse JSON bodies
 app.use(express.json());
 
+interface Foo {
+    id: string;
+    typeId: string;
+    roleId: string;
+    executionId: string;
+    path: string;
+}
+
 // Interface for file path operation requests
 interface AdditionOperation {
-    addendOne: string;
-    addendTwo: string;
+    addendOne: Foo;
+    addendTwo: Foo;
 }
 
 interface SubtractionOperation {
@@ -53,32 +61,29 @@ app.post('/add', async (req: Request, res: Response) => {
         const {
             "ROLE-9WU78dZOrFgmPO7qPMGH": addendOne, // ATTENTION
             "ROLE-BSjUa4FGOj2K2pZ8V4RY": addendTwo, // ATTENTION
-            "ROLE-tkNmvXRvkcghNP6MoPxe": resourceId // ATTENTION
+            "ROLE-tkNmvXRvkcghNP6MoPxe": sum // ATTENTION
         } = req.body;
 
-        if (typeof addendOne !== 'string' || typeof addendTwo !== 'string') {
-            return res.status(400).json({
-                error: 'Both addendOne and addendTwo must be file paths (strings).'
-            });
-        }
+        /*  if (typeof addendOne !== 'string' || typeof addendTwo !== 'string') {
+             return res.status(400).json({
+                 error: 'Both addendOne and addendTwo must be file paths (strings).'
+             });
+         } */
 
         // Read values from GCS files
-        const valueA = await readFromCAFS(addendOne);
-        const valueB = await readFromCAFS(addendTwo);
+        const valueA = await readFromCAFS(addendOne.path);
+        const valueB = await readFromCAFS(addendTwo.path);
 
         // Perform calculation
         const result = valueA + valueB;
 
         // Store result
-        const result2 = await writeToCAFS(resourceId, result);
-
-        const timestamp = new Date().toISOString();
+        const result2 = await writeToCAFS(sum.id, sum.typeId, sum.roleId, sum.executionId, result);
 
         res.json({
             outputs: {
                 'ROLE-tkNmvXRvkcghNP6MoPxe': { // ATTENTION
                     path: result2.storagePath,
-                    timestamp
                 }
             },
         });

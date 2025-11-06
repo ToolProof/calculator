@@ -30,7 +30,7 @@ export async function readFromCAFS(filePath: string): Promise<number> {
 /** Writes an integer value to a Google Cloud Storage file, via CAFS
  * @param value The integer value to store
  */
-export async function writeToCAFS(resourceId: string, value: number) {
+export async function writeToCAFS(id: string, typeId: string, roleId: string, executionId: string, value: number) {
     try {
         const jsonData: IntegerResourceType =
         {
@@ -38,7 +38,10 @@ export async function writeToCAFS(resourceId: string, value: number) {
         };
         const jsonString = JSON.stringify(jsonData, null, 2);
 
-        const result = await cafs.storeContent('TYPE-VwApMgUcs1Dsuxj2pUiU', resourceId, jsonString); // ATTENTION: hardcoded type ID
+        const result = await cafs.storeContent(
+            { id, typeId, roleId, executionId },
+            jsonString
+        );
         return result;
     } catch (error) {
         throw new Error(`Failed to write file: ${error}`);
