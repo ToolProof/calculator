@@ -8,9 +8,6 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install git for fetching git-based dependencies
-RUN apk add --no-cache git
-
 # Install all dependencies (including dev dependencies for building)
 RUN npm ci
 
@@ -28,9 +25,6 @@ WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
-
-# Install git for fetching git-based dependencies during install
-RUN apk add --no-cache git
 
 # Install only production dependencies
 RUN npm ci --only=production && npm cache clean --force
