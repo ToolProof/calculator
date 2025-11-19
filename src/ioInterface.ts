@@ -20,7 +20,7 @@ export async function readFromCAFS(filePath: string): Promise<number> {
     try {
         // Extract folder name from filePath if it contains a folder structure
         // Format: retrieve/[content-hash]?folder=[foldername]
-        const url = `${CAFS_BASE_URL}/retrieve/${filePath}?folder=TYPE-Integer`;
+        const url = `${CAFS_BASE_URL}/retrieve/${filePath}`;
 
         const response = await fetch(url, {
             method: 'GET',
