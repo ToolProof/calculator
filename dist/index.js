@@ -24,9 +24,9 @@ app.get('/test-cafs', async (req, res) => {
 });
 app.post('/add', async (req, res) => {
     try {
-        const { "ROLE-EdqLSRLtD3a6jx3ZnLc7": addendOne, // ATTENTION
-        "ROLE-vp306rfl9kJefQglzKsw": addendTwo, // ATTENTION
-        "ROLE-U6VmyXU9oWlths6i0cJL": sum // ATTENTION
+        const { "ROLE-oFlXwLf2HWnCFNZLEReM": addendOne, // ATTENTION
+        "ROLE-3m48cWFdcNluj17LeDpF": addendTwo, // ATTENTION
+        "ROLE-X8h4lDokv2GpUeUUUDQe": sum // ATTENTION
          } = req.body;
         /*  if (typeof addendOne !== 'string' || typeof addendTwo !== 'string') {
              return res.status(400).json({
@@ -34,20 +34,15 @@ app.post('/add', async (req, res) => {
              });
          } */
         // Read values from GCS files
-        console.log("addendOne -> ", addendOne);
         const valueA = await readFromCAFS(addendOne.path);
-        console.log("value A -> ", valueA);
         const valueB = await readFromCAFS(addendTwo.path);
-        console.log("valueB -> ", valueB);
         // Perform calculation
         const result = valueA + valueB;
-        console.log("result -> ", result);
         // Store result
         const result2 = await writeToCAFS(sum.id, sum.typeId, sum.roleId, sum.executionId, result);
-        console.log("result2 -> ", result2);
         res.json({
             outputs: {
-                'ROLE-U6VmyXU9oWlths6i0cJL': {
+                'ROLE-X8h4lDokv2GpUeUUUDQe': {
                     path: result2.storagePath,
                 }
             },
