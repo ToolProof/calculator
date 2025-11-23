@@ -8,7 +8,9 @@ export async function readFromCAFS(filePath) {
     try {
         // Extract folder name from filePath if it contains a folder structure
         // Format: retrieve/[content-hash]?folder=[foldername]
-        const url = `${CAFS_BASE_URL}/retrieve/${filePath}?folder=TYPE-Integer`;
+        const path = filePath.split('/').pop() || '';
+        const folder = filePath.split('/').slice(0, -1).join('/') || 'TYPE-Integer';
+        const url = `${CAFS_BASE_URL}/retrieve/${path}?folder=${folder}`;
         const response = await fetch(url, {
             method: 'GET',
             headers: {
