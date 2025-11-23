@@ -3,12 +3,13 @@ const CAFS_BASE_URL = process.env.CAFS_BASE_URL || 'http://34.147.128.57/api/caf
 
 // Interface for the JSON structure in storage files
 export interface IntegerResourceType {
-    semanticIdentity: number;
+    identity: number;
 }
 
 // Interface for CAFS store response
 interface StoreContentResponse {
     storagePath: string;
+    timestamp: string;
     contentHash?: string;
 }
 
@@ -38,11 +39,11 @@ export async function readFromCAFS(filePath: string): Promise<number> {
 
         const content: IntegerResourceType = JSON.parse(jsonData.content);
 
-        if (typeof content.semanticIdentity !== 'number') {
+        if (typeof content.identity !== 'number') {
             throw new Error(`File ${filePath} does not contain a valid number value`);
         }
 
-        return content.semanticIdentity;
+        return content.identity;
     } catch (error) {
         throw new Error(`Failed to read file ${filePath}: ${error}`);
     }
@@ -65,7 +66,7 @@ export async function writeToCAFS(
 ): Promise<StoreContentResponse> {
     try {
         const jsonData: IntegerResourceType = {
-            semanticIdentity: value
+            identity: value
         };
         const content = JSON.stringify(jsonData, null, 2);
 

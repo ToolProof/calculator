@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { readFromCAFS, writeToCAFS } from './ioInterface.js';
+import { time } from 'console';
 
 
 const app = express();
@@ -59,9 +60,9 @@ app.get('/test-cafs', async (req: Request, res: Response) => {
 app.post('/add', async (req: Request, res: Response) => {
     try {
         const {
-            "ROLE-oFlXwLf2HWnCFNZLEReM": addendOne, // ATTENTION
-            "ROLE-3m48cWFdcNluj17LeDpF": addendTwo, // ATTENTION
-            "ROLE-X8h4lDokv2GpUeUUUDQe": sum // ATTENTION
+            "ROLE-SKHJzzXuPj9d40xE05r7": addendOne, // ATTENTION
+            "ROLE-ZO35pYgen6c6byPMIIXn": addendTwo, // ATTENTION
+            "ROLE-W1ifaHcjcT0JhqH5AjpO": sum // ATTENTION
         } = req.body;
 
         /*  if (typeof addendOne !== 'string' || typeof addendTwo !== 'string') {
@@ -82,8 +83,9 @@ app.post('/add', async (req: Request, res: Response) => {
 
         res.json({
             outputs: {
-                'ROLE-X8h4lDokv2GpUeUUUDQe': { // ATTENTION
+                'ROLE-W1ifaHcjcT0JhqH5AjpO': { // ATTENTION
                     path: result2.storagePath,
+                    timestamp: result2.timestamp
                 }
             },
         });

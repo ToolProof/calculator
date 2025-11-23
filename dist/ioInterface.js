@@ -9,27 +9,22 @@ export async function readFromCAFS(filePath) {
         // Extract folder name from filePath if it contains a folder structure
         // Format: retrieve/[content-hash]?folder=[foldername]
         const url = `${CAFS_BASE_URL}/retrieve/${filePath}?folder=TYPE-Integer`;
-        console.log("url -> ", url);
         const response = await fetch(url, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
         });
-        console.log("response -> ", response);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const fileContents = await response.text();
-        console.log("fileContents -> ", fileContents);
         const jsonData = JSON.parse(fileContents);
-        console.log("jsonData -> ", jsonData);
         const content = JSON.parse(jsonData.content);
-        console.log("content -> ", content);
-        if (typeof content.semanticIdentity !== 'number') {
+        if (typeof content.identity !== 'number') {
             throw new Error(`File ${filePath} does not contain a valid number value`);
         }
-        return content.semanticIdentity;
+        return content.identity;
     }
     catch (error) {
         throw new Error(`Failed to read file ${filePath}: ${error}`);
@@ -46,10 +41,9 @@ export async function readFromCAFS(filePath) {
 export async function writeToCAFS(id, typeId, roleId, executionId, value) {
     try {
         const jsonData = {
-            semanticIdentity: value
+            identity: value
         };
         const content = JSON.stringify(jsonData, null, 2);
-        console.log("content -> ", content);
         const requestBody = {
             meta: {
                 id,
@@ -59,7 +53,6 @@ export async function writeToCAFS(id, typeId, roleId, executionId, value) {
             },
             content
         };
-        console.log("requestBody -> ", requestBody);
         const response = await fetch(`${CAFS_BASE_URL}/store`, {
             method: 'POST',
             headers: {
@@ -67,12 +60,10 @@ export async function writeToCAFS(id, typeId, roleId, executionId, value) {
             },
             body: JSON.stringify(requestBody)
         });
-        console.log("response -> ", response);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const result = await response.json();
-        console.log("result -> ", result);
         return result;
     }
     catch (error) {
