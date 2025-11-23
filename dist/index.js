@@ -4,24 +4,6 @@ const app = express();
 const PORT = Number(process.env.PORT) || 8080;
 // Middleware to parse JSON bodies
 app.use(express.json());
-app.get('/', (req, res) => {
-    // Keep root endpoint side-effect free to avoid edge 503s when storage is unavailable.
-    res.json({ status: 'OK', message: 'Numerical service is up and running.', timestamp: new Date().toISOString() });
-});
-// Safe CAFS debugging endpoint: GET /test-cafs?id=<RER-or-path>
-app.get('/test-cafs', async (req, res) => {
-    try {
-        const id = req.query.id;
-        if (typeof id !== 'string' || !id) {
-            return res.status(400).json({ error: "Missing required query parameter 'id'" });
-        }
-        const value = await readFromCAFS(id);
-        return res.json({ id, value });
-    }
-    catch (error) {
-        return res.status(500).json({ error: `CAFS read failed: ${error}` });
-    }
-});
 app.post('/add', async (req, res) => {
     try {
         const { "ROLE-SKHJzzXuPj9d40xE05r7": addendOne, // ATTENTION
@@ -39,7 +21,7 @@ app.post('/add', async (req, res) => {
         // Perform calculation
         const result = valueA + valueB;
         // Store result
-        const result2 = await writeToCAFS(sum.id, sum.typeId, sum.roleId, sum.executionId, result);
+        const result2 = await writeToCAFS(sum.id, sum.typeId, sum.creationContext.roleId, sum.creationContext.executionId, result);
         res.json({
             outputs: {
                 'ROLE-W1ifaHcjcT0JhqH5AjpO': {
@@ -53,41 +35,6 @@ app.post('/add', async (req, res) => {
         res.status(500).json({ error: `Internal server error: ${error}` });
     }
 });
-/* app.post('/multiply', async (req: Request, res: Response) => {
-    try {
-        const { multiplicand, multiplier }: MultiplicationOperation = req.body;
-
-        if (typeof multiplicand !== 'string' || typeof multiplier !== 'string') {
-            return res.status(400).json({
-                error: 'Both multiplicand and multiplier must be file paths (strings).'
-            });
-        }
-
-        // Read values from GCS files
-        const multiplicandValue = await readFromGCS(multiplicand);
-        const multiplierValue = await readFromGCS(multiplier);
-
-        // Perform calculation
-        const result = multiplicandValue * multiplierValue;
-
-        // Store result in GCS
-        const outputPath = `integers/${result}.json`;
-        await writeToGCS(outputPath, result);
-
-        const timestamp = new Date().toISOString();
-
-        res.json({
-            outputs: {
-                'RER-13bTni46ZIs6FhqglRQY': { // ATTENTION
-                    path: outputPath,
-                    timestamp
-                }
-            },
-        });
-    } catch (error) {
-        res.status(500).json({ error: `Internal server error: ${error}` });
-    }
-}); */
 // Health check endpoint
 app.get('/health', (req, res) => {
     res.json({ status: 'OK', message: 'Numerical server is running' });

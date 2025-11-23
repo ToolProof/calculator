@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
 import { readFromCAFS, writeToCAFS } from './ioInterface.js';
-import { time } from 'console';
 
 
 const app = express();
@@ -8,54 +7,6 @@ const PORT = Number(process.env.PORT) || 8080;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
-
-interface Foo {
-    id: string;
-    typeId: string;
-    roleId: string;
-    executionId: string;
-    path: string;
-}
-
-// Interface for file path operation requests
-interface AdditionOperation {
-    addendOne: Foo;
-    addendTwo: Foo;
-}
-
-interface SubtractionOperation {
-    minuend: string;
-    subtrahend: string;
-}
-
-interface MultiplicationOperation {
-    multiplicand: string;
-    multiplier: string;
-}
-
-interface DivisionOperation {
-    dividend: string;
-    divisor: string;
-}
-
-app.get('/', (req: Request, res: Response) => {
-    // Keep root endpoint side-effect free to avoid edge 503s when storage is unavailable.
-    res.json({ status: 'OK', message: 'Numerical service is up and running.', timestamp: new Date().toISOString() });
-});
-
-// Safe CAFS debugging endpoint: GET /test-cafs?id=<RER-or-path>
-app.get('/test-cafs', async (req: Request, res: Response) => {
-    try {
-        const id = req.query.id;
-        if (typeof id !== 'string' || !id) {
-            return res.status(400).json({ error: "Missing required query parameter 'id'" });
-        }
-        const value = await readFromCAFS(id);
-        return res.json({ id, value });
-    } catch (error) {
-        return res.status(500).json({ error: `CAFS read failed: ${error}` });
-    }
-});
 
 app.post('/add', async (req: Request, res: Response) => {
     try {
@@ -79,7 +30,13 @@ app.post('/add', async (req: Request, res: Response) => {
         const result = valueA + valueB;
 
         // Store result
-        const result2 = await writeToCAFS(sum.id, sum.typeId, sum.roleId, sum.executionId, result);
+        const result2 = await writeToCAFS(
+            sum.id, 
+            sum.typeId, 
+            sum.creationContext.roleId, 
+            sum.creationContext.executionId,
+            result
+        );
 
         res.json({
             outputs: {
@@ -94,41 +51,6 @@ app.post('/add', async (req: Request, res: Response) => {
     }
 });
 
-/* app.post('/multiply', async (req: Request, res: Response) => {
-    try {
-        const { multiplicand, multiplier }: MultiplicationOperation = req.body;
-
-        if (typeof multiplicand !== 'string' || typeof multiplier !== 'string') {
-            return res.status(400).json({
-                error: 'Both multiplicand and multiplier must be file paths (strings).'
-            });
-        }
-
-        // Read values from GCS files
-        const multiplicandValue = await readFromGCS(multiplicand);
-        const multiplierValue = await readFromGCS(multiplier);
-
-        // Perform calculation
-        const result = multiplicandValue * multiplierValue;
-
-        // Store result in GCS
-        const outputPath = `integers/${result}.json`;
-        await writeToGCS(outputPath, result);
-
-        const timestamp = new Date().toISOString();
-
-        res.json({
-            outputs: {
-                'RER-13bTni46ZIs6FhqglRQY': { // ATTENTION
-                    path: outputPath,
-                    timestamp
-                }
-            },
-        });
-    } catch (error) {
-        res.status(500).json({ error: `Internal server error: ${error}` });
-    }
-}); */
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
