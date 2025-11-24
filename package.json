@@ -10,7 +10,7 @@
     "dev": "node --loader ts-node/esm src/index.ts"
   },
   "dependencies": {
-    "@toolproof-npm/schema": "^0.1.13",
+    "@toolproof-npm/schema": "^0.1.14",
     "express": "^4.18.2"
   },
   "devDependencies": {
