@@ -1,5 +1,5 @@
 // CAFS API Configuration
-const CAFS_BASE_URL = process.env.CAFS_BASE_URL || 'http://34.147.128.57/api/cafs';
+const CAFS_BASE_URL = process.env.CAFS_BASE_URL || 'http://34.39.50.174/api/cafs';
 
 // Interface for the JSON structure in storage files
 export interface IntegerResourceType {
