@@ -1,3 +1,4 @@
+import { ResourceDataJson } from '@toolproof-npm/schema';
 import express, { Request, Response } from 'express';
 import { readFromCAFS, writeToCAFS } from './ioInterface.js';
 
@@ -11,30 +12,30 @@ app.use(express.json());
 app.post('/add', async (req: Request, res: Response) => {
     try {
         const {
-            "ROLE-SKHJzzXuPj9d40xE05r7": addendOne, // ATTENTION
-            "ROLE-ZO35pYgen6c6byPMIIXn": addendTwo, // ATTENTION
-            "ROLE-W1ifaHcjcT0JhqH5AjpO": sum // ATTENTION
-        } = req.body;
+            AddendOne,
+            AddendTwo,
+            Sum
+        }: { [key: string]: ResourceDataJson } = req.body;
 
         // Read values from GCS files
-        const valueOne = await readFromCAFS(addendOne.path);
-        const valueTwo = await readFromCAFS(addendTwo.path);
+        const valueOne = await readFromCAFS(AddendOne.path);
+        const valueTwo = await readFromCAFS(AddendTwo.path);
 
         // Perform calculation
         const calculationResult = valueOne + valueTwo;
 
         // Store result
         const storageResult = await writeToCAFS(
-            sum.id, 
-            sum.typeId, 
-            sum.creationContext.roleId, 
-            sum.creationContext.executionId,
+            Sum.id, 
+            Sum.typeId, 
+            Sum.creationContext.roleId, 
+            Sum.creationContext.executionId,
             calculationResult
         );
 
         res.json({
             outputs: {
-                'ROLE-W1ifaHcjcT0JhqH5AjpO': { // ATTENTION
+                'Sum': {
                     path: storageResult.storagePath,
                     timestamp: storageResult.timestamp
                 }
