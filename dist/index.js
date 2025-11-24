@@ -10,23 +10,18 @@ app.post('/add', async (req, res) => {
         "ROLE-ZO35pYgen6c6byPMIIXn": addendTwo, // ATTENTION
         "ROLE-W1ifaHcjcT0JhqH5AjpO": sum // ATTENTION
          } = req.body;
-        /*  if (typeof addendOne !== 'string' || typeof addendTwo !== 'string') {
-             return res.status(400).json({
-                 error: 'Both addendOne and addendTwo must be file paths (strings).'
-             });
-         } */
         // Read values from GCS files
-        const valueA = await readFromCAFS(addendOne.path);
-        const valueB = await readFromCAFS(addendTwo.path);
+        const valueOne = await readFromCAFS(addendOne.path);
+        const valueTwo = await readFromCAFS(addendTwo.path);
         // Perform calculation
-        const result = valueA + valueB;
+        const calculationResult = valueOne + valueTwo;
         // Store result
-        const result2 = await writeToCAFS(sum.id, sum.typeId, sum.creationContext.roleId, sum.creationContext.executionId, result);
+        const storageResult = await writeToCAFS(sum.id, sum.typeId, sum.creationContext.roleId, sum.creationContext.executionId, calculationResult);
         res.json({
             outputs: {
                 'ROLE-W1ifaHcjcT0JhqH5AjpO': {
-                    path: result2.storagePath,
-                    timestamp: result2.timestamp
+                    path: storageResult.storagePath,
+                    timestamp: storageResult.timestamp
                 }
             },
         });

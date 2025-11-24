@@ -69,7 +69,7 @@ Numbers in GCS should be stored as JSON files with this structure:
 
 1. Install dependencies:
    ```bash
-   npm install
+   pnpm install
    ```
 
 2. Configure your GCS bucket name:
@@ -85,13 +85,13 @@ Numbers in GCS should be stored as JSON files with this structure:
 
 4. Build and run:
    ```bash
-   npm run build
-   npm start
+   pnpm run build
+   pnpm start
    ```
 
    Or for development:
    ```bash
-   npm run dev
+   pnpm run dev
    ```
 
 ## Docker Deployment
