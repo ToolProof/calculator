@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@toolproof-npm/schema':
-        specifier: ^0.1.12
+        specifier: ^0.1.13
         version: 0.1.13
       express:
         specifier: ^4.18.2
