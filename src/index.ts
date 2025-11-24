@@ -3,7 +3,7 @@ import express, { Request, Response } from 'express';
 import { readFromCAFS, writeToCAFS } from './ioInterface.js';
 
 
-const app = express();
+const app: express.Application = express();
 const PORT = Number(process.env.PORT) || 8080;
 
 // Middleware to parse JSON bodies
