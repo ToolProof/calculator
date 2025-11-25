@@ -19,13 +19,17 @@ async function readTwoInputs(input1: ResourceDataJson, input2: ResourceDataJson)
 // Helper function to write a single output to CAFS and format response
 async function writeSingleOutput(output: ResourceDataJson, value: number, outputName: string) {
     const storageResult = await writeToCAFS(
-        output.id,
-        output.typeId,
-        output.creationContext.roleId,
-        output.creationContext.executionId,
-        value
+        {
+            id: output.id,
+            typeId: output.typeId,
+            creationContext: {
+                roleId: output.creationContext.roleId,
+                executionId: output.creationContext.executionId
+            }
+        },
+        JSON.stringify({ identity: value })
     );
-    
+
     return {
         outputs: {
             [outputName]: {
@@ -38,27 +42,35 @@ async function writeSingleOutput(output: ResourceDataJson, value: number, output
 
 // Helper function to write two outputs to CAFS and format response
 async function writeTwoOutputs(
-    output1: ResourceDataJson, 
-    value1: number, 
+    output1: ResourceDataJson,
+    value1: number,
     outputName1: string,
-    output2: ResourceDataJson, 
-    value2: number, 
+    output2: ResourceDataJson,
+    value2: number,
     outputName2: string
 ) {
     const storage1 = await writeToCAFS(
-        output1.id,
-        output1.typeId,
-        output1.creationContext.roleId,
-        output1.creationContext.executionId,
-        value1
+        {
+            id: output1.id,
+            typeId: output1.typeId,
+            creationContext: {
+                roleId: output1.creationContext.roleId,
+                executionId: output1.creationContext.executionId
+            }
+        },
+        JSON.stringify({ identity: value1 })
     );
 
     const storage2 = await writeToCAFS(
-        output2.id,
-        output2.typeId,
-        output2.creationContext.roleId,
-        output2.creationContext.executionId,
-        value2
+        {
+            id: output2.id,
+            typeId: output2.typeId,
+            creationContext: {
+                roleId: output2.creationContext.roleId,
+                executionId: output2.creationContext.executionId
+            }
+        },
+        JSON.stringify({ identity: value2 })
     );
 
     return {

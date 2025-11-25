@@ -32,28 +32,11 @@ export async function readFromCAFS(filePath) {
         throw new Error(`Failed to read file ${filePath}: ${error}`);
     }
 }
-/**
- * Writes an integer value to CAFS via HTTP API
- * @param id The document ID
- * @param typeId The type ID
- * @param roleId The role ID
- * @param executionId The execution ID
- * @param value The integer value to store
- */
-export async function writeToCAFS(id, typeId, roleId, executionId, value) {
+export async function writeToCAFS(meta, data) {
     try {
-        const jsonData = {
-            identity: value
-        };
-        const content = JSON.stringify(jsonData, null, 2);
         const requestBody = {
-            meta: {
-                id,
-                typeId,
-                roleId,
-                executionId
-            },
-            content
+            meta,
+            content: data
         };
         const response = await fetch(`${CAFS_BASE_URL}/store`, {
             method: 'POST',

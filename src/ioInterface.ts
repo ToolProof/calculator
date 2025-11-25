@@ -51,35 +51,22 @@ export async function readFromCAFS(filePath: string): Promise<number> {
     }
 }
 
-/**
- * Writes an integer value to CAFS via HTTP API
- * @param id The document ID
- * @param typeId The type ID
- * @param roleId The role ID
- * @param executionId The execution ID
- * @param value The integer value to store
- */
+
 export async function writeToCAFS(
-    id: string,
-    typeId: string,
-    roleId: string,
-    executionId: string,
-    value: number
+    meta: {
+        id: string,
+        typeId: string,
+        creationContext: {
+            roleId: string,
+            executionId: string
+        }
+    },
+    data: string
 ): Promise<StoreContentResponse> {
     try {
-        const jsonData: IntegerResourceType = {
-            identity: value
-        };
-        const content = JSON.stringify(jsonData, null, 2);
-
         const requestBody = {
-            meta: {
-                id,
-                typeId,
-                roleId,
-                executionId
-            },
-            content
+            meta,
+            content: data
         };
 
         const response = await fetch(`${CAFS_BASE_URL}/store`, {
