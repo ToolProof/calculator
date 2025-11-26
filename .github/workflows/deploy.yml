@@ -1,4 +1,4 @@
-name: Deploy to GKE
+name: Deploy calculator to GKE
 
 on:
   push:
@@ -12,8 +12,8 @@ env:
   REGION: ${{ secrets.REGION }}
   REPOSITORY: ${{ secrets.REPOSITORY }}
   IMAGE: ${{ secrets.IMAGE_NAME }}
-  DEPLOYMENT_NAME: numericals-deployment
-  CONTAINER_NAME: numericals
+  DEPLOYMENT_NAME: calculator-deployment
+  CONTAINER_NAME: calculator
 
 jobs:
   deploy:
