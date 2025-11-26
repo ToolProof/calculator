@@ -19,7 +19,7 @@ async function writeSingleOutput(output, value, outputName) {
             roleId: output.creationContext.roleId,
             executionId: output.creationContext.executionId
         }
-    }, JSON.stringify({ identity: value }));
+    }, JSON.stringify({ identity: value }, null, 2));
     return {
         outputs: {
             [outputName]: {
@@ -38,7 +38,7 @@ async function writeTwoOutputs(output1, value1, outputName1, output2, value2, ou
             roleId: output1.creationContext.roleId,
             executionId: output1.creationContext.executionId
         }
-    }, JSON.stringify({ identity: value1 }));
+    }, JSON.stringify({ identity: value1 }, null, 2));
     const storage2 = await writeToCAFS({
         id: output2.id,
         typeId: output2.typeId,
@@ -46,7 +46,7 @@ async function writeTwoOutputs(output1, value1, outputName1, output2, value2, ou
             roleId: output2.creationContext.roleId,
             executionId: output2.creationContext.executionId
         }
-    }, JSON.stringify({ identity: value2 }));
+    }, JSON.stringify({ identity: value2 }, null, 2));
     return {
         outputs: {
             [outputName1]: {

@@ -27,7 +27,7 @@ async function writeSingleOutput(output: ResourceDataJson, value: number, output
                 executionId: output.creationContext.executionId
             }
         },
-        JSON.stringify({ identity: value })
+        JSON.stringify({ identity: value }, null, 2)
     );
 
     return {
@@ -58,7 +58,7 @@ async function writeTwoOutputs(
                 executionId: output1.creationContext.executionId
             }
         },
-        JSON.stringify({ identity: value1 })
+        JSON.stringify({ identity: value1 }, null, 2)
     );
 
     const storage2 = await writeToCAFS(
@@ -70,7 +70,7 @@ async function writeTwoOutputs(
                 executionId: output2.creationContext.executionId
             }
         },
-        JSON.stringify({ identity: value2 })
+        JSON.stringify({ identity: value2 }, null, 2)
     );
 
     return {
