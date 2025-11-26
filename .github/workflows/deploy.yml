@@ -13,7 +13,7 @@ env:
   REPOSITORY: ${{ secrets.REPOSITORY }}
   IMAGE: ${{ secrets.IMAGE_NAME }}
   DEPLOYMENT_NAME: calculator-deployment
-  CONTAINER_NAME: calculator
+  CONTAINER_NAME: image-calculator-1
 
 jobs:
   deploy:
