@@ -1,7 +1,7 @@
 {
-  "name": "numerical",
+  "name": "calculator",
   "version": "1.0.0",
-  "description": "Express server with numerical job endpoints",
+  "description": "Express server with calculator job endpoints",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
