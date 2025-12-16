@@ -1,4 +1,4 @@
-import { ResourceDataJson } from '@toolproof-npm/schema';
+import { ResourceJson } from '@toolproof-npm/schema';
 import express, { Request, Response } from 'express';
 import { readFromCAFS, writeToCAFS } from './ioInterface.js';
 
@@ -10,20 +10,20 @@ const PORT = Number(process.env.PORT) || 8080;
 app.use(express.json());
 
 // Helper function to read two input values from CAFS
-async function readTwoInputs(input1: ResourceDataJson, input2: ResourceDataJson): Promise<[number, number]> {
+async function readTwoInputs(input1: ResourceJson, input2: ResourceJson): Promise<[number, number]> {
     const value1 = await readFromCAFS(input1.path);
     const value2 = await readFromCAFS(input2.path);
     return [value1, value2];
 }
 
 // Helper function to write a single output to CAFS and format response
-async function writeSingleOutput(output: ResourceDataJson, value: number, outputName: string) {
+async function writeSingleOutput(output: ResourceJson, value: number, outputName: string) {
     const storageResult = await writeToCAFS(
         {
-            id: output.id,
-            typeId: output.typeId,
+            identity: output.identity,
+            resourceTypeId: output.resourceTypeId,
             creationContext: {
-                roleId: output.creationContext.roleId,
+                resourceRoleId: output.creationContext.resourceRoleId,
                 executionId: output.creationContext.executionId
             }
         },
@@ -33,8 +33,8 @@ async function writeSingleOutput(output: ResourceDataJson, value: number, output
     return {
         outputs: {
             [outputName]: {
-                path: storageResult.storagePath,
-                timestamp: storageResult.timestamp
+                success: storageResult.success,
+                path: storageResult.path
             }
         }
     };
@@ -42,19 +42,19 @@ async function writeSingleOutput(output: ResourceDataJson, value: number, output
 
 // Helper function to write two outputs to CAFS and format response
 async function writeTwoOutputs(
-    output1: ResourceDataJson,
+    output1: ResourceJson,
     value1: number,
     outputName1: string,
-    output2: ResourceDataJson,
+    output2: ResourceJson,
     value2: number,
     outputName2: string
 ) {
     const storage1 = await writeToCAFS(
         {
-            id: output1.id,
-            typeId: output1.typeId,
+            identity: output1.identity,
+            resourceTypeId: output1.resourceTypeId,
             creationContext: {
-                roleId: output1.creationContext.roleId,
+                resourceRoleId: output1.creationContext.resourceRoleId,
                 executionId: output1.creationContext.executionId
             }
         },
@@ -63,10 +63,10 @@ async function writeTwoOutputs(
 
     const storage2 = await writeToCAFS(
         {
-            id: output2.id,
-            typeId: output2.typeId,
+            identity: output2.identity,
+            resourceTypeId: output2.resourceTypeId,
             creationContext: {
-                roleId: output2.creationContext.roleId,
+                resourceRoleId: output2.creationContext.resourceRoleId,
                 executionId: output2.creationContext.executionId
             }
         },
@@ -76,12 +76,12 @@ async function writeTwoOutputs(
     return {
         outputs: {
             [outputName1]: {
-                path: storage1.storagePath,
-                timestamp: storage1.timestamp
+                path: storage1.path,
+                success: storage1.success
             },
             [outputName2]: {
-                path: storage2.storagePath,
-                timestamp: storage2.timestamp
+                path: storage2.path,
+                success: storage2.success
             }
         }
     };
@@ -89,7 +89,7 @@ async function writeTwoOutputs(
 
 app.post('/add', async (req: Request, res: Response) => {
     try {
-        const { AddendOne, AddendTwo, Sum }: { [key: string]: ResourceDataJson } = req.body;
+        const { AddendOne, AddendTwo, Sum }: { [key: string]: ResourceJson } = req.body;
         const [inputOne, inputTwo] = await readTwoInputs(AddendOne, AddendTwo);
         const result = inputOne + inputTwo;
         const response = await writeSingleOutput(Sum, result, 'Sum');
@@ -102,7 +102,7 @@ app.post('/add', async (req: Request, res: Response) => {
 
 app.post('/subtract', async (req: Request, res: Response) => {
     try {
-        const { Minuend, Subtrahend, Difference }: { [key: string]: ResourceDataJson } = req.body;
+        const { Minuend, Subtrahend, Difference }: { [key: string]: ResourceJson } = req.body;
         const [inputOne, inputTwo] = await readTwoInputs(Minuend, Subtrahend);
         const result = inputOne - inputTwo;
         const response = await writeSingleOutput(Difference, result, 'Difference');
@@ -115,7 +115,7 @@ app.post('/subtract', async (req: Request, res: Response) => {
 
 app.post('/multiply', async (req: Request, res: Response) => {
     try {
-        const { Multiplicand, Multiplier, Product }: { [key: string]: ResourceDataJson } = req.body;
+        const { Multiplicand, Multiplier, Product }: { [key: string]: ResourceJson } = req.body;
         const [inputOne, inputTwo] = await readTwoInputs(Multiplicand, Multiplier);
         const result = inputOne * inputTwo;
         const response = await writeSingleOutput(Product, result, 'Product');
@@ -128,7 +128,7 @@ app.post('/multiply', async (req: Request, res: Response) => {
 
 app.post('/divide', async (req: Request, res: Response) => {
     try {
-        const { Dividend, Divisor, Quotient, Remainder }: { [key: string]: ResourceDataJson } = req.body;
+        const { Dividend, Divisor, Quotient, Remainder }: { [key: string]: ResourceJson } = req.body;
         const [inputOne, inputTwo] = await readTwoInputs(Dividend, Divisor);
         const quotientResult = Math.floor(inputOne / inputTwo);
         const remainderResult = inputOne % inputTwo;
