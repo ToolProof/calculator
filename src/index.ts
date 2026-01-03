@@ -24,7 +24,7 @@ async function writeSingleOutput(output: ResourcePotentialOutputJson, value: num
     );
 
     return {
-        outputs: {
+        outputMap: {
             [outputName]: resource
         }
     };
@@ -50,7 +50,7 @@ async function writeTwoOutputs(
     );
 
     return {
-        outputs: {
+        outputMap: {
             [outputName1]: resource1,
             [outputName2]: resource2
         }
