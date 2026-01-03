@@ -12,8 +12,8 @@ importers:
         specifier: ^0.1.65
         version: 0.1.65
       '@toolproof-npm/shared':
-        specifier: ^0.1.78
-        version: 0.1.78
+        specifier: ^0.1.79
+        version: 0.1.79
       express:
         specifier: ^4.18.2
         version: 4.21.2
@@ -156,8 +156,8 @@ packages:
   '@toolproof-npm/schema@0.1.65':
     resolution: {integrity: sha512-kp7WJt0U8qjgYkRL470ZAk+LJZwDck1732iTF6QeeNdCMY55qcpiiSJM5Kw733n3s0pPwwFfPxsiFQFgfNCN9Q==}
 
-  '@toolproof-npm/shared@0.1.78':
-    resolution: {integrity: sha512-TQ0ATE7JBY951+nDu4cKWAFpGVgFTRMUP03gL8fddUabreHhFSMj9UkYckPRU3fpcRtiROUTwJ6yB5Z87OXR1A==}
+  '@toolproof-npm/shared@0.1.79':
+    resolution: {integrity: sha512-1QVcuPruK6PpXfSKsnT1YJEb18eZFXP0M5hD2qPYMJF5iwRfQhFbTX81xsmaJZgkOuBKz5qpl1vOm3X3YxRZ1g==}
 
   '@tootallnate/once@2.0.0':
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
@@ -1104,7 +1104,7 @@ snapshots:
 
   '@toolproof-npm/schema@0.1.65': {}
 
-  '@toolproof-npm/shared@0.1.78':
+  '@toolproof-npm/shared@0.1.79':
     dependencies:
       '@toolproof-npm/schema': 0.1.65
       firebase-admin: 13.6.0
