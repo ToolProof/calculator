@@ -55,10 +55,10 @@ export async function writeToCAFS(
 ): Promise<StoreContentResponse> {
     try {
         // Create full materialized resource using shared utility
-        const resource = RESOURCE_CREATION.createMaterializedResource(potentialOutput, {
-            content: data,
-            extractedData: JSON.parse(data),
-        });
+        const resource = RESOURCE_CREATION.createMaterializedResourceFromPotentialOutput(
+            potentialOutput,
+            JSON.parse(data)
+        );
 
         const requestBody = {
             resource,
