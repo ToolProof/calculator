@@ -19,14 +19,7 @@ async function readTwoInputs(input1: ResourceJson, input2: ResourceJson): Promis
 // Helper function to write a single output to CAFS and format response
 async function writeSingleOutput(output: ResourceJson, value: number, outputName: string) {
     const storageResult = await writeToCAFS(
-        {
-            identity: output.identity,
-            resourceTypeRef: output.resourceTypeRef,
-            creationContext: {
-                resourceRoleRef: output.creationContext.resourceRoleRef,
-                executionRef: output.creationContext.executionRef
-            }
-        },
+        output as any, // Cast to potential-output (it has all required fields)
         JSON.stringify({ identity: value }, null, 2)
     );
 
@@ -50,26 +43,12 @@ async function writeTwoOutputs(
     outputName2: string
 ) {
     const storage1 = await writeToCAFS(
-        {
-            identity: output1.identity,
-            resourceTypeRef: output1.resourceTypeRef,
-            creationContext: {
-                resourceRoleRef: output1.creationContext.resourceRoleRef,
-                executionRef: output1.creationContext.executionRef
-            }
-        },
+        output1 as any, // Cast to potential-output (it has all required fields)
         JSON.stringify({ identity: value1 }, null, 2)
     );
 
     const storage2 = await writeToCAFS(
-        {
-            identity: output2.identity,
-            resourceTypeRef: output2.resourceTypeRef,
-            creationContext: {
-                resourceRoleRef: output2.creationContext.resourceRoleRef,
-                executionRef: output2.creationContext.executionRef
-            }
-        },
+        output2 as any, // Cast to potential-output (it has all required fields)
         JSON.stringify({ identity: value2 }, null, 2)
     );
 

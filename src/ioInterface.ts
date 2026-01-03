@@ -1,4 +1,5 @@
-import { PartialResourceMeta } from "@toolproof-npm/shared/types";
+import { RESOURCE_CREATION } from '@toolproof-npm/shared';
+import type { ResourcePotentialOutputJson } from '@toolproof-npm/schema';
 
 // CAFS API Configuration
 const CAFS_BASE_URL = process.env.CAFS_BASE_URL || 'http://34.39.50.174/api/cafs';
@@ -49,12 +50,18 @@ export async function readFromCAFS(path: string): Promise<number> {
 
 
 export async function writeToCAFS(
-    meta: PartialResourceMeta,
+    potentialOutput: ResourcePotentialOutputJson,
     data: string
 ): Promise<StoreContentResponse> {
     try {
+        // Create full materialized resource using shared utility
+        const resource = RESOURCE_CREATION.createMaterializedResource(potentialOutput, {
+            content: data,
+            extractedData: JSON.parse(data),
+        });
+
         const requestBody = {
-            meta,
+            resource,
             content: data
         };
 

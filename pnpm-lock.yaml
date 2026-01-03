@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@toolproof-npm/schema':
-        specifier: ^0.1.60
-        version: 0.1.60
+        specifier: ^0.1.65
+        version: 0.1.65
       '@toolproof-npm/shared':
-        specifier: ^0.1.67
-        version: 0.1.67
+        specifier: ^0.1.78
+        version: 0.1.78
       express:
         specifier: ^4.18.2
         version: 4.21.2
@@ -153,11 +153,11 @@ packages:
   '@protobufjs/utf8@1.1.0':
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
 
-  '@toolproof-npm/schema@0.1.60':
-    resolution: {integrity: sha512-NLWv5B+mmwVIK06+vCTqxSE2FE9dQJjvipcod2tT9DFU2uws5PsIhUgtvgQkfj4M4xSsgQHz0LypqwyP0Sfy9w==}
+  '@toolproof-npm/schema@0.1.65':
+    resolution: {integrity: sha512-kp7WJt0U8qjgYkRL470ZAk+LJZwDck1732iTF6QeeNdCMY55qcpiiSJM5Kw733n3s0pPwwFfPxsiFQFgfNCN9Q==}
 
-  '@toolproof-npm/shared@0.1.67':
-    resolution: {integrity: sha512-YQeNYDNR+zEYLJshB+fiYBZxBqS25Z7cYF5R4Hr+wbMQw8M3tDKeOSwsTUrXHwrC6upOiDS+WE8AmGJx559ksw==}
+  '@toolproof-npm/shared@0.1.78':
+    resolution: {integrity: sha512-TQ0ATE7JBY951+nDu4cKWAFpGVgFTRMUP03gL8fddUabreHhFSMj9UkYckPRU3fpcRtiROUTwJ6yB5Z87OXR1A==}
 
   '@tootallnate/once@2.0.0':
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
@@ -1102,11 +1102,11 @@ snapshots:
   '@protobufjs/utf8@1.1.0':
     optional: true
 
-  '@toolproof-npm/schema@0.1.60': {}
+  '@toolproof-npm/schema@0.1.65': {}
 
-  '@toolproof-npm/shared@0.1.67':
+  '@toolproof-npm/shared@0.1.78':
     dependencies:
-      '@toolproof-npm/schema': 0.1.60
+      '@toolproof-npm/schema': 0.1.65
       firebase-admin: 13.6.0
     transitivePeerDependencies:
       - encoding
