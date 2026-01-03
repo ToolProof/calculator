@@ -9,18 +9,11 @@ export interface IntegerResourceType {
     identity: number;
 }
 
-// Interface for CAFS store response
-interface StoreContentResponse {
-    success: boolean;
-    path: string;
-    message?: string;
-}
-
 /**
  * Reads an integer value from CAFS via HTTP API
  * @param path The full path to retrieve (e.g., TYPE-Natural/abc123...)
  */
-export async function readFromCAFS(path: string): Promise<number> {
+export async function readFromPersistence(path: string): Promise<number> {
     try {
         const url = `${CAFS_BASE_URL}/retrieve/${path}`;
 
@@ -49,20 +42,19 @@ export async function readFromCAFS(path: string): Promise<number> {
 }
 
 
-export async function writeToCAFS(
+export async function writeToPersistence(
     potentialOutput: ResourcePotentialOutputJson,
-    data: string
-): Promise<StoreContentResponse> {
+    content: string
+) {
     try {
         // Create full materialized resource using shared utility
         const resource = RESOURCE_CREATION.createMaterializedResourceFromPotentialOutput(
             potentialOutput,
-            JSON.parse(data)
+            JSON.parse(content)
         );
 
         const requestBody = {
-            resource,
-            content: data
+            resource
         };
 
         const response = await fetch(`${CAFS_BASE_URL}/store`, {
@@ -77,12 +69,10 @@ export async function writeToCAFS(
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const result: StoreContentResponse = await response.json();
-        // Map persistence response to expected format
-        return {
-            success: result.success,
-            path: result.path,
-        };
+        await response.json(); // Verify successful storage
+        
+        // Return the complete materialized resource
+        return resource;
     } catch (error) {
         throw new Error(`Failed to write file: ${error}`);
     }
