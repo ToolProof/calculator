@@ -48,7 +48,7 @@ export async function writeToPersistence(
 ) {
     try {
         // Create full materialized resource using shared utility
-        const resource = RESOURCE_CREATION.createMaterializedResourceFromPotentialOutput(
+        const resource = RESOURCE_CREATION.createMaterializedResource(
             potentialOutput,
             JSON.parse(content)
         );

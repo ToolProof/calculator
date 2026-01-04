@@ -31,7 +31,7 @@ export async function readFromPersistence(path) {
 export async function writeToPersistence(potentialOutput, content) {
     try {
         // Create full materialized resource using shared utility
-        const resource = RESOURCE_CREATION.createMaterializedResourceFromPotentialOutput(potentialOutput, JSON.parse(content));
+        const resource = RESOURCE_CREATION.createMaterializedResource(potentialOutput, JSON.parse(content));
         const requestBody = {
             resource
         };

@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@toolproof-npm/schema": "^0.1.65",
-    "@toolproof-npm/shared": "^0.1.81",
+    "@toolproof-npm/shared": "^0.1.83",
     "express": "^4.18.2"
   },
   "devDependencies": {
