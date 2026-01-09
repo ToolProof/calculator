@@ -19,6 +19,20 @@ async function writeSingleOutput(output, value, outputName) {
         }
     };
 }
+// Helper function to write an error output to CAFS and format response
+async function writeErrorOutput(output, name, description, details) {
+    const content = {
+        name,
+        description,
+        ...(details ? { details } : {}),
+    };
+    const resource = await writeToPersistence(output, JSON.stringify(content, null, 2));
+    return {
+        outputMap: {
+            ErrorOutput: resource,
+        }
+    };
+}
 // Helper function to write two outputs to CAFS and format response
 async function writeTwoOutputs(output1, value1, outputName1, output2, value2, outputName2) {
     const resource1 = await writeToPersistence(output1, JSON.stringify({ identity: value1 }, null, 2));
@@ -47,7 +61,16 @@ app.post('/subtract', async (req, res) => {
     try {
         const { Minuend, Subtrahend } = req.body;
         const Difference = req.body['Difference'];
+        const ErrorOutput = req.body['ErrorOutput'];
         const [inputOne, inputTwo] = await readTwoInputs(Minuend, Subtrahend);
+        if (inputTwo > inputOne) {
+            const response = await writeErrorOutput(ErrorOutput, 'SubtractInvalidInput', `Subtrahend (${inputTwo}) is larger than minuend (${inputOne}); subtraction would result in a negative value.`, {
+                minuend: inputOne,
+                subtrahend: inputTwo,
+            });
+            res.json(response);
+            return;
+        }
         const result = inputOne - inputTwo;
         const response = await writeSingleOutput(Difference, result, 'Difference');
         res.json(response);
@@ -74,7 +97,16 @@ app.post('/divide', async (req, res) => {
         const { Dividend, Divisor } = req.body;
         const Quotient = req.body['Quotient'];
         const Remainder = req.body['Remainder'];
+        const ErrorOutput = req.body['ErrorOutput'];
         const [inputOne, inputTwo] = await readTwoInputs(Dividend, Divisor);
+        if (inputTwo === 0) {
+            const response = await writeErrorOutput(ErrorOutput, 'DivideByZero', `Cannot divide by zero (dividend ${inputOne}, divisor ${inputTwo}).`, {
+                dividend: inputOne,
+                divisor: inputTwo,
+            });
+            res.json(response);
+            return;
+        }
         const quotientResult = Math.floor(inputOne / inputTwo);
         const remainderResult = inputOne % inputTwo;
         const response = await writeTwoOutputs(Quotient, quotientResult, 'Quotient', Remainder, remainderResult, 'Remainder');

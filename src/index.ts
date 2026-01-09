@@ -1,4 +1,4 @@
-import { ResourceJson, ResourcePotentialOutputJson } from '@toolproof-npm/schema';
+import { ResourceJson, ResourcePotentialOutputJson, JsonDataJson } from '@toolproof-npm/schema';
 import express, { Request, Response } from 'express';
 import { readFromPersistence, writeToPersistence } from './persistenceInterface.js';
 
@@ -26,6 +26,31 @@ async function writeSingleOutput(output: ResourcePotentialOutputJson, value: num
     return {
         outputMap: {
             [outputName]: resource
+        }
+    };
+}
+
+// Helper function to write an error output to CAFS and format response
+async function writeErrorOutput(
+    output: ResourcePotentialOutputJson,
+    name: string,
+    description: string,
+    details?: Record<string, JsonDataJson>
+) {
+    const content = {
+        name,
+        description,
+        ...(details ? { details } : {}),
+    } as unknown as JsonDataJson;
+
+    const resource = await writeToPersistence(
+        output,
+        JSON.stringify(content, null, 2)
+    );
+
+    return {
+        outputMap: {
+            ErrorOutput: resource,
         }
     };
 }
@@ -75,7 +100,23 @@ app.post('/subtract', async (req: Request, res: Response) => {
     try {
         const { Minuend, Subtrahend }: { [key: string]: ResourceJson } = req.body;
         const Difference: ResourcePotentialOutputJson = req.body['Difference'];
+        const ErrorOutput: ResourcePotentialOutputJson = req.body['ErrorOutput'];
         const [inputOne, inputTwo] = await readTwoInputs(Minuend, Subtrahend);
+
+        if (inputTwo > inputOne) {
+            const response = await writeErrorOutput(
+                ErrorOutput,
+                'SubtractInvalidInput',
+                `Subtrahend (${inputTwo}) is larger than minuend (${inputOne}); subtraction would result in a negative value.`,
+                {
+                    minuend: inputOne as unknown as JsonDataJson,
+                    subtrahend: inputTwo as unknown as JsonDataJson,
+                }
+            );
+            res.json(response);
+            return;
+        }
+
         const result = inputOne - inputTwo;
         const response = await writeSingleOutput(Difference, result, 'Difference');
         res.json(response);
@@ -104,7 +145,23 @@ app.post('/divide', async (req: Request, res: Response) => {
         const { Dividend, Divisor }: { [key: string]: ResourceJson } = req.body;
         const Quotient: ResourcePotentialOutputJson = req.body['Quotient'];
         const Remainder: ResourcePotentialOutputJson = req.body['Remainder'];
+        const ErrorOutput: ResourcePotentialOutputJson = req.body['ErrorOutput'];
         const [inputOne, inputTwo] = await readTwoInputs(Dividend, Divisor);
+
+        if (inputTwo === 0) {
+            const response = await writeErrorOutput(
+                ErrorOutput,
+                'DivideByZero',
+                `Cannot divide by zero (dividend ${inputOne}, divisor ${inputTwo}).`,
+                {
+                    dividend: inputOne as unknown as JsonDataJson,
+                    divisor: inputTwo as unknown as JsonDataJson,
+                }
+            );
+            res.json(response);
+            return;
+        }
+
         const quotientResult = Math.floor(inputOne / inputTwo);
         const remainderResult = inputOne % inputTwo;
         const response = await writeTwoOutputs(Quotient, quotientResult, 'Quotient', Remainder, remainderResult, 'Remainder');
