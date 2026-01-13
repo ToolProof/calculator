@@ -174,11 +174,11 @@ app.post('/divide', async (req: Request, res: Response) => {
 
 app.post('/double', async (req: Request, res: Response) => {
     try {
-        const { n }: { [key: string]: ResourceJson } = req.body;
-        const doubled: ResourcePotentialOutputJson = req.body['doubled'];
-        const inputValue = await readFromPersistence(n.path);
+        const { N }: { [key: string]: ResourceJson } = req.body;
+        const Doubled: ResourcePotentialOutputJson = req.body['Doubled'];
+        const inputValue = await readFromPersistence(N.path);
         const result = inputValue * 2;
-        const response = await writeSingleOutput(doubled, result, 'doubled');
+        const response = await writeSingleOutput(Doubled, result, 'Doubled');
         res.json(response);
     } catch (error) {
         res.status(500).json({ error: `Internal server error: ${error}` });
