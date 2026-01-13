@@ -1,4 +1,4 @@
-# Calculator Server with Google Cloud Storage
+# numerical Server with Google Cloud Storage
 
 A TypeScript Express server that performs mathematical operations on numbers stored in Google Cloud Storage files.
 
@@ -61,7 +61,7 @@ Numbers in GCS should be stored as JSON files with this structure:
 
 ## Environment Variables
 
-- `GCS_BUCKET_NAME`: The name of your Google Cloud Storage bucket (default: "default-calculator-bucket")
+- `GCS_BUCKET_NAME`: The name of your Google Cloud Storage bucket (default: "default-numerical-bucket")
 - `PORT`: Server port (default: 3002)
 - `GOOGLE_APPLICATION_CREDENTIALS`: Path to your service account key file (optional if using default credentials)
 
@@ -100,7 +100,7 @@ Numbers in GCS should be stored as JSON files with this structure:
 
 ```bash
 # Build the image
-docker build -t calculator-server:latest .
+docker build -t numerical-server:latest .
 
 # Or use the provided script
 .\docker-run.bat  # Windows
@@ -112,32 +112,32 @@ docker build -t calculator-server:latest .
 ```bash
 # Basic run
 docker run -d \
-  --name calculator-server \
+  --name numerical-server \
   -p 3000:3000 \
   -e GCS_BUCKET_NAME=your-bucket-name \
-  calculator-server:latest
+  numerical-server:latest
 
 # With Google Cloud credentials (using service account key)
 docker run -d \
-  --name calculator-server \
+  --name numerical-server \
   -p 3000:3000 \
   -e GCS_BUCKET_NAME=your-bucket-name \
   -e GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json \
   -v /path/to/your/service-account-key.json:/app/credentials.json:ro \
-  calculator-server:latest
+  numerical-server:latest
 
 # With environment file
 docker run -d \
-  --name calculator-server \
+  --name numerical-server \
   -p 3000:3000 \
   --env-file .env \
-  calculator-server:latest
+  numerical-server:latest
 ```
 
 ### Docker Features
 
 - **Multi-stage build**: Optimized production image size
-- **Security**: Runs as non-root user (`calculator`)
+- **Security**: Runs as non-root user (`numerical`)
 - **Health check**: Built-in health monitoring
 - **Alpine Linux**: Small base image for reduced attack surface
 - **Production optimized**: Only production dependencies in final image
@@ -146,16 +146,16 @@ docker run -d \
 
 ```bash
 # View logs
-docker logs -f calculator-server
+docker logs -f numerical-server
 
 # Stop container
-docker stop calculator-server
+docker stop numerical-server
 
 # Remove container
-docker rm calculator-server
+docker rm numerical-server
 
 # Remove image
-docker rmi calculator-server:latest
+docker rmi numerical-server:latest
 
 # Health check
 curl http://localhost:3000/health

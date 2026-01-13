@@ -131,10 +131,10 @@ app.post('/double', async (req, res) => {
 });
 // Health check endpoint
 app.get('/health', (req, res) => {
-    res.json({ status: 'OK', message: 'Calculator server is running' });
+    res.json({ status: 'OK', message: 'Numerical server is running' });
 });
 // Start the server
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Calculator server is running on port ${PORT}`);
+    console.log(`Numerical server is running on port ${PORT}`);
 });
 export default app;
