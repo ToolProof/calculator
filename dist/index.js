@@ -116,6 +116,19 @@ app.post('/divide', async (req, res) => {
         res.status(500).json({ error: `Internal server error: ${error}` });
     }
 });
+app.post('/double', async (req, res) => {
+    try {
+        const { n } = req.body;
+        const doubled = req.body['doubled'];
+        const inputValue = await readFromPersistence(n.path);
+        const result = inputValue * 2;
+        const response = await writeSingleOutput(doubled, result, 'doubled');
+        res.json(response);
+    }
+    catch (error) {
+        res.status(500).json({ error: `Internal server error: ${error}` });
+    }
+});
 // Health check endpoint
 app.get('/health', (req, res) => {
     res.json({ status: 'OK', message: 'Calculator server is running' });
