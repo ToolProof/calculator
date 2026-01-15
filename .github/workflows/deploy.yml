@@ -12,8 +12,8 @@ env:
   REGION: ${{ secrets.REGION }}
   REPOSITORY: ${{ secrets.REPOSITORY }}
   IMAGE: ${{ secrets.IMAGE_NAME }}
-  DEPLOYMENT_NAME: calculator-deployment
-  CONTAINER_NAME: image-calculator-1
+  DEPLOYMENT_NAME: numerical-deployment
+  CONTAINER_NAME: image-numerical-1
 
 jobs:
   deploy:
@@ -44,19 +44,19 @@ jobs:
         run: |
           docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:latest
 
-      # - name: Install gcloud CLI and GKE auth plugin
-      #   run: |
-      #     echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-      #     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
-      #     sudo apt-get update
-      #     sudo apt-get install -y google-cloud-cli google-cloud-cli-gke-gcloud-auth-plugin
+      - name: Install gcloud CLI and GKE auth plugin
+        run: |
+          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+          curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+          sudo apt-get update
+          sudo apt-get install -y google-cloud-cli google-cloud-cli-gke-gcloud-auth-plugin
 
-      # - name: Get GKE credentials
-      #   run: |
-      #     export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-      #     gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} --zone ${{ env.GKE_ZONE }} --project ${{ env.PROJECT_ID }}
+      - name: Get GKE credentials
+        run: |
+          export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+          gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} --zone ${{ env.GKE_ZONE }} --project ${{ env.PROJECT_ID }}
 
-      # - name: Deploy to GKE
-      #   run: |
-      #     kubectl rollout restart deployment/${{ env.DEPLOYMENT_NAME }}
-      #     kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
+      - name: Deploy to GKE
+        run: |
+          kubectl rollout restart deployment/${{ env.DEPLOYMENT_NAME }}
+          kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
