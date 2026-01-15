@@ -1,4 +1,4 @@
-name: Deploy calculator to GKE
+name: Deploy numerical to GKE
 
 on:
   push:
