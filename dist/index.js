@@ -118,11 +118,11 @@ app.post('/divide', async (req, res) => {
 });
 app.post('/double', async (req, res) => {
     try {
-        const { n } = req.body;
-        const doubled = req.body['doubled'];
-        const inputValue = await readFromPersistence(n.path);
+        const { N } = req.body;
+        const Doubled = req.body['Doubled'];
+        const inputValue = await readFromPersistence(N.path);
         const result = inputValue * 2;
-        const response = await writeSingleOutput(doubled, result, 'doubled');
+        const response = await writeSingleOutput(Doubled, result, 'Doubled');
         res.json(response);
     }
     catch (error) {
