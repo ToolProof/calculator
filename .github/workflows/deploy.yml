@@ -12,8 +12,8 @@ env:
   REGION: ${{ secrets.REGION }}
   REPOSITORY: ${{ secrets.REPOSITORY }}
   IMAGE: ${{ secrets.IMAGE_NAME }}
-  DEPLOYMENT_NAME: calculator-deployment
-  CONTAINER_NAME: image-calculator-1
+  DEPLOYMENT_NAME: numerical-deployment
+  CONTAINER_NAME: image-numerical-1
 
 jobs:
   deploy:
